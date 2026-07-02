@@ -477,4 +477,294 @@ const steps = [
   ]},
   {id:'fome_doce', tipo:'opcoes', pergunta:'Como é sua relação com a fome e o doce?', opcoes:[
     {label:'Como normal, sem vontade fora de hora'},
-    {label:'Belisco um pouco à
+    {label:'Belisco um pouco à tarde'},
+    {label:'Ataque de vontade de doce à tarde ou à noite que não consigo controlar', hormonio:'Insulina', intensidade:true},
+    {label:'Fome o dia inteiro, mesmo tendo acabado de comer', hormonio:'Insulina', intensidade:true},
+  ]},
+  {id:'pele', tipo:'opcoes', pergunta:'Você notou escurecimento na pele (pescoço, axilas, virilha)?', opcoes:[
+    {label:'Não'}, {label:'Leve'}, {label:'Visível'},
+    {label:'Intenso', hormonio:'Insulina', intensidade:true},
+  ]},
+  {id:'estresse', tipo:'opcoes', pergunta:'Como está seu nível de estresse hoje?', opcoes:[
+    {label:'Tranquila, controlo bem'}, {label:'Ansiosa, mas dou conta'},
+    {label:'Estresse constante, sinto no corpo', hormonio:'Cortisol', intensidade:true},
+    {label:'Vivo no talo, sem parar um minuto', hormonio:'Cortisol', intensidade:true},
+  ]},
+  {id:'sono', tipo:'opcoes', pergunta:'Como anda seu sono?', opcoes:[
+    {label:'Durmo bem, acordo descansada'}, {label:'Demoro pra dormir'},
+    {label:'Acordo de madrugada e não volto a dormir', hormonio:'Cortisol', intensidade:true},
+    {label:'Durmo mal quase todos os dias', hormonio:'Cortisol', intensidade:true},
+  ]},
+  {id:'calorao', tipo:'opcoes', pergunta:'Você sente calorões ou suor noturno?', opcoes:[
+    {label:'Nunca'}, {label:'De vez em quando'},
+    {label:'Várias vezes por semana', hormonio:'Estrogenio', intensidade:true},
+    {label:'Todos os dias, incluindo à noite', hormonio:'Estrogenio', intensidade:true},
+  ]},
+  {id:'pele_cabelo', tipo:'opcoes', pergunta:'Como estão sua pele, cabelo e libido desde que as mudanças começaram?', opcoes:[
+    {label:'Continuam iguais'}, {label:'Um pouco mais secos, nada grave'},
+    {label:'Notei queda de cabelo e ressecamento', hormonio:'Estrogenio', intensidade:true},
+    {label:'Tudo mudou: pele, cabelo, libido, disposição', hormonio:'Estrogenio', intensidade:true},
+  ]},
+  {id:'energia', tipo:'opcoes', pergunta:'Como está sua energia no dia a dia?', opcoes:[
+    {label:'Cheia de energia'}, {label:'Cansaço leve à tarde'},
+    {label:'Cansaço extremo, mesmo dormindo bem', hormonio:'MetaboLento', intensidade:true},
+    {label:'Não sobra energia pra nada', hormonio:'MetaboLento', intensidade:true},
+  ]},
+  {id:'unhas', tipo:'opcoes', pergunta:'Você notou queda de cabelo, unhas fracas ou intestino preso?', opcoes:[
+    {label:'Não, tudo normal'}, {label:'Um desses'},
+    {label:'Dois desses', hormonio:'MetaboLento', intensidade:true},
+    {label:'Os três juntos', hormonio:'MetaboLento', intensidade:true},
+  ]},
+  // pausa de reasseguramento acontece aqui (fora do array, chamada manualmente)
+  {id:'tentativas', tipo:'opcoes', pergunta:'Você já tentou dieta ou exercício sem resultado nessa fase?', opcoes:[
+    {label:'Ainda não tentei nada específico pra menopausa'},
+    {label:'Tentei, funcionou um pouco, mas não sustentei'},
+    {label:'Tentei de tudo e nada funcionou'},
+    {label:'Tentei e até piorei os sintomas'},
+  ]},
+  {id:'incomodo', tipo:'opcoes', pergunta:'O que mais te incomoda hoje?', opcoes:[
+    {label:'Não reconheço meu corpo no espelho'},
+    {label:'Roupas não servem mais'},
+    {label:'Cansaço o tempo todo'},
+    {label:'Perdi a confiança em mim mesma'},
+  ]},
+];
+
+const TOTAL_STEPS = steps.length + 1; // +1 pelo formulário de lead
+let currentIndex = 0;
+
+/* ---------------- NAVEGAÇÃO ---------------- */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function goTo(stepId){
+  currentIndex = steps.findIndex(s=>s.id===stepId);
+  showScreen('screen-quiz');
+  renderStep();
+}
+
+function startQuiz(){
+  currentIndex = 0;
+  showScreen('screen-quiz');
+  renderStep();
+}
+document.querySelector('#screen-landing .btn').setAttribute('onclick','startQuiz()');
+
+function renderStep(){
+  const step = steps[currentIndex];
+  document.getElementById('step-label').textContent = `Passo ${currentIndex+1} de ${TOTAL_STEPS}`;
+  document.getElementById('progress-fill').style.width = `${Math.round(((currentIndex+1)/TOTAL_STEPS)*100)}%`;
+
+  const body = document.getElementById('quiz-body');
+  let html = `<h2 class="q-title">${step.pergunta}</h2>`;
+
+  if(step.tipo === 'texto'){
+    html += `<input type="text" id="text-input" placeholder="${step.placeholder}" value="${state.nome||''}">`;
+    html += `<button class="btn" id="next-btn" onclick="answerText()">CONTINUAR</button>`;
+  } else if(step.tipo === 'opcoes'){
+    html += `<div class="options">` + step.opcoes.map((o,i)=>`
+      <div class="option" data-i="${i}" onclick="selectOption(${i})">
+        <span>${o.label}</span><span class="radio"></span>
+      </div>`).join('') + `</div>`;
+    html += `<button class="btn" id="next-btn" disabled onclick="nextStep()">CONTINUAR</button>`;
+  } else if(step.tipo === 'imagem'){
+    html += `<div class="img-grid">` + step.opcoes.map((o,i)=>`
+      <div class="img-option" data-i="${i}" onclick="selectOption(${i})">
+        <div class="thumb">${o.emoji}</div>
+        <div class="cap">${o.label}</div>
+      </div>`).join('') + `</div>`;
+    html += `<button class="btn" id="next-btn" disabled onclick="nextStep()">CONTINUAR</button>`;
+  }
+  body.innerHTML = html;
+}
+
+function answerText(){
+  const val = document.getElementById('text-input').value.trim();
+  if(!val) return;
+  state.nome = val;
+  advance();
+}
+
+function selectOption(i){
+  const step = steps[currentIndex];
+  document.querySelectorAll('.option, .img-option').forEach(el=>el.classList.remove('selected'));
+  const els = document.querySelectorAll(step.tipo==='imagem' ? '.img-option' : '.option');
+  els[i].classList.add('selected');
+  document.getElementById('next-btn').disabled = false;
+  state._selected = i;
+}
+
+function nextStep(){
+  const step = steps[currentIndex];
+  const opt = step.opcoes[state._selected];
+  state.respostas[step.id] = opt.label;
+  if(opt.hormonio){
+    state.scores[opt.hormonio] = (state.scores[opt.hormonio]||0) + 1;
+    if(opt.intensidade) state.intensidade++;
+  }
+  advance();
+}
+
+function advance(){
+  // pausa de reasseguramento depois da pergunta 'unhas' (última pergunta hormonal)
+  if(steps[currentIndex].id === 'unhas'){
+    document.getElementById('reassure-name').textContent = state.nome || 'Você';
+    showScreen('screen-reassure');
+    return;
+  }
+  if(steps[currentIndex].id === 'incomodo'){
+    showScreen('screen-lead');
+    return;
+  }
+  currentIndex++;
+  renderStep();
+}
+
+function submitLead(){
+  const idade = document.getElementById('input-idade').value.trim();
+  const whats = document.getElementById('input-whats').value.trim();
+  const email = document.getElementById('input-email').value.trim();
+  const errBox = document.getElementById('lead-error');
+
+  const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const whatsDigits = whats.replace(/\D/g,'');
+  const whatsValido = whatsDigits.length >= 10 && whatsDigits.length <= 11;
+  const idadeValida = /^\d+$/.test(idade) && Number(idade) >= 18 && Number(idade) <= 99;
+
+  if(!idadeValida || !whatsValido || !emailValido){
+    let msgs = [];
+    if(!idadeValida) msgs.push('idade válida (18–99)');
+    if(!whatsValido) msgs.push('WhatsApp com DDD (10 ou 11 números)');
+    if(!emailValido) msgs.push('e-mail válido');
+    errBox.textContent = 'Confere esses campos: ' + msgs.join(', ') + '.';
+    errBox.style.display = 'block';
+    return;
+  }
+  errBox.style.display = 'none';
+
+  state.idade = idade; state.whatsapp = whats; state.email = email;
+  enviarLeadParaPlanilha();
+  showScreen('screen-processing');
+  setTimeout(renderResult, 1800);
+}
+
+function enviarLeadParaPlanilha(){
+  if(!APPS_SCRIPT_URL) return; // ainda não configurado — não trava o quiz
+  const {vilao, sinal} = computeVilao();
+  const payload = {
+    data: new Date().toISOString(),
+    nome: state.nome,
+    idade: state.idade,
+    whatsapp: state.whatsapp,
+    email: state.email,
+    hormonio: vilao,
+    sinal: sinal,
+  };
+  // no-cors: não conseguimos ler a resposta, mas o envio funciona (padrão pra Apps Script Web App)
+  fetch(APPS_SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify(payload),
+  }).catch(()=>{ /* falha silenciosa: não deve travar a experiência da usuária */ });
+}
+
+/* ---------------- RESULTADO ---------------- */
+function computeVilao(){
+  const ordem = ['Insulina','Cortisol','Estrogenio','MetaboLento']; // critério de desempate
+  let vilao = ordem[0];
+  ordem.forEach(h=>{ if(state.scores[h] > state.scores[vilao]) vilao = h; });
+  const sinal = state.intensidade >= 4 ? 'vermelho' : 'amarelo';
+  return {vilao, sinal};
+}
+
+function renderResult(){
+  const {vilao, sinal} = computeVilao();
+  const r = resultados[`${vilao}-${sinal}`];
+  const nome = state.nome || 'Você';
+
+  const html = `
+    <h2 style="text-align:center;font-size:24px;">Olá, <span class="name-highlight">${nome}</span></h2>
+    <p class="muted" style="text-align:center;margin-bottom:26px;">Seu diagnóstico hormonal foi concluído.</p>
+
+    <div class="card-villain">
+      <span class="villain-badge">⚠️ Seu principal sabotador identificado</span>
+      <span class="signal-tag signal-${sinal}">Sinal ${sinal}</span>
+      <h2 class="result-title signal-text-${sinal}">${r.titulo}</h2>
+      <p>${r.texto}</p>
+    </div>
+
+    <div class="card light">
+      <h3 style="font-size:16px;">💡 O que isso significa?</h3>
+      <p>${significados[vilao]}</p>
+    </div>
+
+    <div class="card-villain">
+      <h3 style="font-size:16px;color:inherit;margin-bottom:14px;">O que isso causa em você</h3>
+      <ol class="causa-list">
+        ${causas[vilao].map((c,i)=>`<li><span class="causa-num">${i+1}</span>${c}</li>`).join('')}
+      </ol>
+    </div>
+
+    <div class="card light obs-block">
+      <h3 style="font-size:16px;">Observações personalizadas</h3>
+      ${gerarObservacoes().map(o=>`<p>• ${o}</p>`).join('')}
+    </div>
+
+    <span class="next-step-badge">E o que fazer pra mudar isso?</span>
+    <div class="card-highlight">
+      <h3 style="font-size:18px;color:#fff;">Chega de dieta maluca. O Desafio Seca Menopausa é pra você.</h3>
+      <p>O Jejum Hormonal é o protocolo feito para a mulher na menopausa emagrecer, perder a pochete e sem passar fome, porque ele une o jejum com estratégias que regulam seus hormônios.</p>
+      <p style="margin-top:10px;">No Desafio Seca Menopausa, você vai:</p>
+      <ul class="check-list">
+        <li>Entender exatamente qual fase do seu corpo está travando o emagrecimento</li>
+        <li>Aprender a aplicar o jejum certo pra sua fase, sem restrição e sem sofrimento</li>
+        <li>Sentir sua pochete diminuir já nos primeiros dias</li>
+        <li>Reequilibrar cortisol, insulina e estrogênio ao mesmo tempo, comendo de verdade</li>
+      </ul>
+      <a class="btn btn-invert" href="#oferta" style="text-decoration:none;margin-top:6px;">QUERO PARTICIPAR</a>
+    </div>
+
+    <div class="card-villain">
+      <h2 class="result-title" style="font-size:24px;">Perca até 5kg em 4 dias e seque a barriga da menopausa</h2>
+      <div class="doctor-mini">
+        <img src="foto-dr-pedro.webp" alt="Dr. Pedro Paulo Nabuco" class="doctor-photo-placeholder" width="56" height="56" loading="lazy" decoding="async" style="object-fit:cover;">
+        <p style="margin:0;">O desafio ao vivo com o Dr. Pedro Paulo Nabuco, médico especialista em emagrecimento na menopausa.</p>
+      </div>
+      <div class="info-chip-row">
+        <span class="info-chip">📅 3 a 6 de agosto</span>
+        <span class="info-chip">🕐 07h da manhã</span>
+      </div>
+      <p class="alert-text">⚠️ Não é milagre: assim que você entra, o desafio já começa. Você recebe tarefas simples pra preparar o seu corpo e já começar a ver resultados. Quem faz essa preparação chega com vantagem no encontro ao vivo.</p>
+    </div>
+
+    <div class="price-card" id="oferta">
+      <div class="price-old">R$ 147</div>
+      <div class="price-new">R$ 29</div>
+      <div class="price-tag">pagamento único</div>
+      <a class="btn" href="https://pay.hotmart.com/N106363772B?checkoutMode=10&bid=1782320716137" style="text-decoration:none;">QUERO ENTRAR NO DESAFIO SECA MENOPAUSA</a>
+      <p class="guarantee">🛡️ Garantia incondicional de 7 dias: se em até 7 dias você sentir que o desafio não é pra você, devolvemos 100% do seu investimento — sem perguntas, sem burocracia.</p>
+    </div>
+
+    <h3 style="font-size:16px;text-align:center;margin-bottom:6px;">Mais de 500 mulheres já participaram do Desafio Seca Menopausa</h3>
+    <p class="muted" style="text-align:center;font-size:13px;margin-bottom:16px;">Veja o que elas dizem:</p>
+    <div class="testi-print"><img src="depoimento-print-01.webp" alt="Depoimento" width="1170" height="451" loading="lazy" decoding="async"></div>
+    <div class="testi-print"><img src="depoimento-print-02.webp" alt="Depoimento" width="1169" height="372" loading="lazy" decoding="async"></div>
+    <div class="testi-print"><img src="depoimento-print-03.webp" alt="Depoimento" width="750" height="299" loading="lazy" decoding="async"></div>
+    <div class="testi-print"><img src="depoimento-print-04.webp" alt="Depoimento" width="898" height="250" loading="lazy" decoding="async"></div>
+    <div class="testi-print"><img src="depoimento-print-05.webp" alt="Depoimento" width="1170" height="299" loading="lazy" decoding="async"></div>
+    <div class="testi-print"><img src="depoimento-print-06.webp" alt="Depoimento" width="1170" height="412" loading="lazy" decoding="async"></div>
+
+    <a class="btn" href="#oferta" style="text-decoration:none;margin:10px 0 24px;">QUERO PARTICIPAR</a>
+
+    <footer class="disclaimer">Desafio Seca Menopausa · Dr. Pedro Paulo Nabuco</footer>
+  `;
+  document.getElementById('result-body').innerHTML = html;
+  showScreen('screen-result');
+}
+</script>
+</body>
+</html>
