@@ -196,8 +196,8 @@
     border-radius:var(--radius-card); padding:30px; margin-bottom:20px; color:#fff;
   }
   .card-highlight p{ color:rgba(255,255,255,0.92); }
-  .card-highlight .check-list li{ color:#fff; }
-  .card-highlight .check-list li::before{ content:'✓'; color:#fff; }
+  .card-highlight .check-list li{ color:var(--green); }
+  .card-highlight .check-list li::before{ content:'✓'; color:var(--green); }
   .btn-invert{ background:#FFFFFF; color:var(--accent); box-shadow:0 8px 20px rgba(0,0,0,0.18); }
   .btn-invert:hover{ box-shadow:0 10px 24px rgba(0,0,0,0.25); }
 
@@ -235,11 +235,11 @@
   #screen-result .causa-num{ background:rgba(220,38,38,0.1); color:#C2185B; }
 
   .next-step-badge{
-    display:inline-block; background:rgba(255,255,255,0.08); color:var(--muted);
+    display:block; width:fit-content; text-align:center; background:var(--green); color:#fff;
     font-size:11.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
-    padding:6px 14px; border-radius:999px; margin-bottom:14px;
+    padding:6px 14px; border-radius:999px; margin:0 auto 14px;
   }
-  #screen-result .next-step-badge{ background:#F7F1F7; color:#8A7891; }
+  #screen-result .next-step-badge{ background:var(--green); color:#fff; }
   .obs-block p{ font-size:14.5px; margin:0 0 12px; padding-left:4px; }
   .obs-block p:last-child{ margin-bottom:0; }
 
@@ -268,6 +268,11 @@
 
   .name-highlight{ color:var(--accent-2); }
 
+  /* pílulas informativas entre blocos */
+  #screen-pill .card.light p{ margin-bottom:14px; }
+  #screen-pill .card.light p:last-child{ margin-bottom:0; }
+  #screen-pill .card.light b{ color:var(--accent-2); }
+
   /* ---------------- TELA DE RESULTADO EM FUNDO BRANCO ---------------- */
   #screen-result{
     background:#FFFFFF;
@@ -286,6 +291,7 @@
     border:1px solid rgba(36,21,40,0.1);
     box-shadow:0 10px 28px rgba(36,21,40,0.08);
   }
+  #screen-result .card-villain b{ color:#C2185B; }
   #screen-result .villain-badge{ color:#C2185B; }
   #screen-result .signal-amarelo{ background:rgba(212,160,23,0.12); color:#B8860B; }
   #screen-result .signal-vermelho{ background:rgba(220,38,38,0.12); color:#DC2626; }
@@ -329,8 +335,8 @@
   <section class="screen active" id="screen-landing">
     <div class="landing">
       <span class="badge-pill">Desafio Seca Menopausa</span>
-      <h1>Descubra qual hormônio da menopausa está travando seu emagrecimento</h1>
-      <p class="sub">Teste rápido de 2 minutos que revela o que está sabotando seu peso nessa fase — e o que fazer pra destravar.</p>
+      <h1>Descubra qual hormônio da menopausa não te deixa emagrecer</h1>
+      <p class="sub">Teste rápido de 2 minutos que revela o que está sabotando seu peso nessa fase, e o que fazer pra destravar.</p>
       <button class="btn" onclick="startQuiz()">QUERO DESCOBRIR</button>
       <p class="micro">Leva menos de 2 minutos <span class="dot">•</span> 100% Confidencial</p>
     </div>
@@ -341,26 +347,30 @@
     <div class="progress-header-wrap">
       <div class="quiz-header">
         <span>Seu Diagnóstico</span>
-        <span class="step" id="step-label">Passo 1 de 14</span>
+        <span class="step" id="step-label">Passo 1 de 16</span>
       </div>
       <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:7%"></div></div>
     </div>
     <div id="quiz-body"></div>
   </section>
 
+  <!-- PÍLULA INFORMATIVA (reaproveitada entre os blocos) -->
+  <section class="screen" id="screen-pill">
+    <div id="pill-body"></div>
+  </section>
+
   <!-- REASSURANCE BREAK -->
   <section class="screen" id="screen-reassure">
     <div class="card light">
-      <h2><span class="name-highlight" id="reassure-name">Nome</span>, respira.</h2>
-      <p>Isso tem explicação e tem solução. Seu corpo não travou por acaso. É a menopausa mexendo nos seus hormônios, e isso muda completamente as regras do emagrecimento. Só que quase ninguém te explica isso.</p>
+      <h2><span class="name-highlight" id="reassure-name">Nome</span>, fique tranquila.</h2>
+      <p>Isso tem explicação, e é mais fácil de resolver do que você imagina. Seu corpo não travou por acaso. É a menopausa mexendo nos seus hormônios, e isso muda completamente as regras do emagrecimento. Só que quase ninguém te explica isso.</p>
 
       <div class="reassure-story">
-        <img src="print-depoimento-pausa.webp" alt="Depoimento de aluna do Desafio Seca Menopausa" width="750" height="550" loading="lazy" decoding="async" style="width:100%;height:auto;display:block;">
+        <img src="print-depoimento-pausa-02.webp" alt="Depoimento de aluna do Desafio Seca Menopausa" width="750" height="550" loading="lazy" decoding="async" style="width:100%;height:auto;display:block;">
         <p class="story-caption"><b>Cristina</b> também estava passando pelo que você está passando agora. Olha como ela está hoje: <span class="highlight">já emagreceu mais de 5kg e reduziu 4cm de cintura</span>.</p>
       </div>
 
-      <p class="reassure-microcopy">Só mais algumas perguntas rápidas e eu já vou finalizar o seu diagnóstico.</p>
-      <button class="btn" onclick="goTo('tentativas')">CONTINUAR</button>
+      <button class="btn" onclick="goTo('energia')">Vamos ver agora como está sua tireoide?</button>
     </div>
   </section>
 
@@ -369,12 +379,8 @@
     <h2 class="q-title">Antes de revelar seu resultado…</h2>
     <p class="muted" style="text-align:center;margin-bottom:26px;">Precisamos de alguns dados pra te mostrar o diagnóstico certo.</p>
     <div class="card">
-      <label class="field-label">Sua idade</label>
-      <input type="number" id="input-idade" placeholder="Ex: 47" min="18" max="99">
-      <label class="field-label">WhatsApp</label>
+      <label class="field-label">WhatsApp (com DDD)</label>
       <input type="tel" id="input-whats" placeholder="(00) 00000-0000">
-      <label class="field-label">Melhor e-mail</label>
-      <input type="email" id="input-email" placeholder="seuemail@exemplo.com">
       <p class="muted" style="font-size:12.5px;margin:-14px 0 20px;">(pra gente conseguir te enviar caso você perca o seu diagnóstico)</p>
       <p id="lead-error" style="display:none;color:#F6489A;font-size:13px;margin:-10px 0 16px;"></p>
       <button class="btn" onclick="submitLead()">QUERO RECEBER MEU DIAGNÓSTICO</button>
@@ -401,28 +407,29 @@
 /* ---------------- DATA ---------------- */
 // Cole aqui a URL do seu Apps Script Web App depois de publicar (veja instruções que te mandei).
 // Enquanto estiver vazia, o quiz funciona normal mas não salva os leads em nenhum lugar.
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwDn_ePqoRU51Ws5_T1qF1ptubcHXbEExWHd6aqyksWBKTDudPN_ns703DHoirckfWu/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzCa7GB5PLaCgHlcQ6j-hYQ4DyitdrhBbtqNecS6aJa657Qu2LP9zfQOWMTLJEkxBWc/exec';
 
-const state = { nome:'', respostas:{}, scores:{Cortisol:0, Insulina:0, Estrogenio:0, MetaboLento:0}, intensidade:0 };
+const state = { nome:'', respostas:{}, opcoesSelecionadas:{}, scores:{Cortisol:0, Insulina:0, Estrogenio:0, MetaboLento:0}, intensidade:0 };
 
-const HORMONIO_LABEL = {Cortisol:'Cortisol', Insulina:'Insulina', Estrogenio:'Estrogênio', MetaboLento:'Metabolismo Lento'};
+const HORMONIO_LABEL = {Cortisol:'Cortisol', Insulina:'Insulina', Estrogenio:'Estrogênio', MetaboLento:'Tireoide'};
+const HORMONIO_CAPS = {Cortisol:'CORTISOL ALTO', Insulina:'RESISTÊNCIA À INSULINA', Estrogenio:'QUEDA DE ESTROGÊNIO', MetaboLento:'TIREOIDE DESACELERADA'};
 
 const resultados = {
-  'Cortisol-amarelo': {titulo:'Seu cortisol tá começando a sabotar você', texto:'Pelas suas respostas, seu corpo está no comecinho do desequilíbrio de cortisol. Ainda dá tempo de segurar antes de virar bola de neve. Não é frescura nem falta de força de vontade. É o hormônio do estresse subindo e mandando seu corpo guardar gordura na barriga, mesmo você comendo direitinho. A gente estabiliza isso agora, antes da queda completa, com o corpo ainda do seu lado.'},
-  'Cortisol-vermelho': {titulo:'Seu cortisol tá no limite, e travando seu emagrecimento', texto:'Pelas suas respostas, seu corpo está gritando. Estresse constante, sono ruim e gordura que não sai da barriga por mais que você se esforce. Isso é cortisol alto tomando conta. Enquanto ele estiver nas alturas, seu corpo protege a gordura em vez de queimar. Não é falta de força de vontade, é biologia, e dá pra reverter. Mas precisa agir agora, antes que vire um ciclo mais difícil de quebrar.'},
-  'Insulina-amarelo': {titulo:'Sua insulina tá começando a te sabotar', texto:'Pelas suas respostas, sua insulina está começando a oscilar. Aquela vontade de doce no fim da tarde não é falta de disciplina, é o corpo pedindo açúcar porque a insulina já não trabalha direito. Você pegou essa fase cedo, e dá pra estabilizar antes que vire resistência à insulina de verdade.'},
-  'Insulina-vermelho': {titulo:'Sua insulina tá travando seu metabolismo', texto:'Fome o dia inteiro, vontade de doce incontrolável e gordura que não sai da barriga mesmo comendo pouco. Isso é resistência à insulina, a principal trava de emagrecimento na menopausa. Seu corpo não está fraco, está em modo estoque, guardando tudo porque a insulina não deixa a gordura virar energia. Enquanto isso não for resolvido, nenhuma dieta vai funcionar direito, e é por isso que você já deve ter se frustrado antes.'},
-  'Estrogenio-amarelo': {titulo:'Seu estrogênio tá começando a cair', texto:'Pelas suas respostas, seu corpo está no comecinho da queda de estrogênio. Está começando a oscilar, mas você pegou cedo, e pegar cedo muda tudo. Quase ninguém percebe essa fase porque os primeiros sinais se disfarçam de estresse, de cansaço, de achar que é só a idade chegando. Não é isso. É hormônio começando a mexer.'},
-  'Estrogenio-vermelho': {titulo:'Seu estrogênio já caiu, e mudou onde seu corpo guarda gordura', texto:'Calorão, suor noturno, pele e cabelo mais secos, gordura que saiu do quadril e foi pra barriga. Isso é queda de estrogênio, e ela muda completamente as regras do jogo. Seu corpo não está quebrado, só reagiu a uma mudança hormonal real que ninguém te explicou direito. A gente trabalha com o corpo, não contra ele.'},
-  'MetaboLento-amarelo': {titulo:'Seu metabolismo tá começando a ficar mais lento', texto:'Pelas suas respostas, seu metabolismo está no comecinho de uma desaceleração. Isso costuma acontecer porque a tireoide não está trabalhando o suficiente nessa fase da menopausa — e é ela quem dita o ritmo de praticamente tudo no seu corpo. Ainda é começo, e começo é a melhor hora de agir, antes que o cansaço e o inchaço se instalem de vez.'},
-  'MetaboLento-vermelho': {titulo:'Seu metabolismo tá travado, e isso está te segurando', texto:'Cansaço extremo mesmo dormindo bem, queda de cabelo, intestino preso, sensação de que tudo ficou mais devagar. Isso costuma acontecer quando a tireoide não está trabalhando o suficiente pra manter seu metabolismo no ritmo certo. Não adianta comer menos ou treinar mais enquanto isso não for ajustado — mas tem jeito, e o primeiro passo é reconhecer que não é frescura, é biologia.'},
+  'Cortisol-amarelo': {titulo:'Seu cortisol tá começando a sabotar você'},
+  'Cortisol-vermelho': {titulo:'Seu cortisol tá no limite, e travando seu emagrecimento'},
+  'Insulina-amarelo': {titulo:'Sua insulina tá começando a te sabotar'},
+  'Insulina-vermelho': {titulo:'Sua insulina tá travando seu metabolismo'},
+  'Estrogenio-amarelo': {titulo:'Seu estrogênio tá começando a cair'},
+  'Estrogenio-vermelho': {titulo:'Seu estrogênio já caiu, e mudou onde seu corpo guarda gordura'},
+  'MetaboLento-amarelo': {titulo:'Sua tireoide tá começando a desacelerar'},
+  'MetaboLento-vermelho': {titulo:'Sua tireoide tá travando seu metabolismo'},
 };
 
 const significados = {
   Cortisol: 'Seu corpo está em modo de alerta constante — e enquanto ele achar que precisa se proteger, vai guardar gordura em vez de queimar.',
   Insulina: 'Seu corpo aprendeu a guardar energia e está com dificuldade pra acessar as reservas de gordura.',
   Estrogenio: 'Seu corpo está se ajustando a uma queda hormonal real — e sem o suporte certo, ele vai continuar mudando onde guarda gordura.',
-  MetaboLento: 'Seu metabolismo está rodando mais devagar do que deveria, e isso afeta tudo: do peso à energia do seu dia.',
+  MetaboLento: 'Sua tireoide está rodando mais devagar do que deveria, e isso afeta tudo: do peso à energia do seu dia.',
 };
 
 const causas = {
@@ -432,54 +439,55 @@ const causas = {
   MetaboLento: ['Cansaço extremo, mesmo dormindo bem', 'Queda de cabelo e unhas mais fracas', 'Intestino preso e digestão mais lenta', 'Sensação de que tudo ficou mais devagar'],
 };
 
-function gerarObservacoes(){
-  const obs = [];
-  const sono = state.respostas.sono || '';
-  const tentativas = state.respostas.tentativas || '';
-  const fomeDoce = state.respostas.fome_doce || '';
+const ALIADO_NATURAL = {
+  Insulina: 'a <b>canela</b>, que ajuda a equilibrar o açúcar no sangue',
+  Cortisol: 'o <b>magnésio</b>, que acalma o sistema nervoso',
+  Estrogenio: 'as <b>sementes</b> (linhaça e gergelim), que ajudam o equilíbrio hormonal',
+  MetaboLento: 'a <b>castanha-do-pará</b>, rica em selênio',
+};
 
-  if(sono.includes('madrugada') || sono.includes('mal quase')){
-    obs.push('Seu padrão de sono indica que seu corpo não está tendo a chance de se recuperar à noite — e é durante o sono profundo que ele trabalha a favor do seu emagrecimento.');
-  } else if(sono){
-    obs.push('Mesmo com um sono razoável, o restante das suas respostas mostra que o desequilíbrio hormonal já está afetando seu metabolismo.');
-  }
+const ALIADO_CONTEXTO = {
+  Insulina: 'pra ajudar a controlar a resistência à insulina',
+  Cortisol: 'pro cortisol alto',
+  Estrogenio: 'pra apoiar o estrogênio em queda',
+  MetaboLento: 'pra dar uma força na tireoide',
+};
 
-  if(tentativas.includes('Tentei de tudo')){
-    obs.push('Você já tentou de tudo e nada segurou — isso não é falta de esforço, é sinal de que faltava atacar a causa hormonal certa, não só a alimentação.');
-  } else if(tentativas.includes('piorei')){
-    obs.push('Tentativas anteriores até pioraram os sintomas — sinal claro de que o corpo precisava de uma abordagem hormonal, não de mais restrição.');
+function gerarObservacaoPersonalizada(vilao, vilao2){
+  if(vilao2){
+    return `Dois aliados naturais aqui: ${ALIADO_NATURAL[vilao]}, e ${ALIADO_NATURAL[vilao2]}. Isso é só o começo — no <b>DESAFIO SECA MENOPAUSA</b> você aprende o protocolo completo com o Dr. Pedro.`;
   }
-
-  if(fomeDoce.includes('não consigo controlar')){
-    obs.push('A vontade de doce que você descreveu não é falta de força de vontade — é o seu corpo pedindo açúcar porque o hormônio responsável por regular isso está desequilibrado.');
-  }
-
-  if(obs.length === 0){
-    obs.push('Suas respostas mostram um padrão consistente de desequilíbrio hormonal típico dessa fase — e quanto antes você agir, mais fácil é reverter.');
-  }
-  return obs.slice(0,3);
+  return `Um aliado natural ${ALIADO_CONTEXTO[vilao]} é ${ALIADO_NATURAL[vilao]}. Fique tranquila: no <b>DESAFIO SECA MENOPAUSA</b> você vai aprender muito mais sobre isso com o Dr. Pedro.`;
 }
 
 /* Passos de pontuação: id, pergunta, tipo, opções[{label, hormonio(opcional), intensidade(bool), emoji(para tipo imagem)}] */
 const steps = [
   {id:'nome', tipo:'texto', pergunta:'Como você se chama?', placeholder:'Digite seu nome'},
+  {id:'idade', tipo:'numero', pergunta:'Quantos anos você tem?', placeholder:'Ex: 47'},
   {id:'fase', tipo:'opcoes', pergunta:'Em que fase você está?', opcoes:[
     {label:'Ainda menstruo, mas notei mudanças no corpo'},
     {label:'Menstruação irregular há alguns meses'},
     {label:'Não menstruo há mais de 1 ano'},
     {label:'Não sei dizer, só sei que meu corpo mudou'},
   ]},
-  {id:'acumulo', tipo:'imagem', pergunta:'Onde você mais acumula gordura hoje?', opcoes:[
+  {id:'acumulo', tipo:'imagem', pergunta:'Onde você mais acumula gordura hoje?',
+   subtitulo:'A forma como seu corpo guarda gordura tem relação direta com seus hormônios.', opcoes:[
     {label:'Só na barriga, do nada', hormonio:'Cortisol', emoji:'🔥'},
     {label:'Saiu do quadril e foi pra barriga', hormonio:'Estrogenio', emoji:'⚖️'},
     {label:'Espalhada, ganhei em tudo', hormonio:'Insulina', emoji:'🍬'},
     {label:'Não sei dizer, só sei que não sai', hormonio:'MetaboLento', emoji:'🐌'},
   ]},
-  {id:'fome_doce', tipo:'opcoes', pergunta:'Como é sua relação com a fome e o doce?', opcoes:[
-    {label:'Como normal, sem vontade fora de hora'},
-    {label:'Belisco um pouco à tarde'},
-    {label:'Ataque de vontade de doce à tarde ou à noite que não consigo controlar', hormonio:'Insulina', intensidade:true},
-    {label:'Fome o dia inteiro, mesmo tendo acabado de comer', hormonio:'Insulina', intensidade:true},
+  {id:'doce', tipo:'opcoes', pergunta:'Como é sua vontade de doce?', opcoes:[
+    {label:'Raramente sinto vontade'},
+    {label:'Não gosto muito de doce'},
+    {label:'Sinto muita vontade, principalmente à tarde ou à noite', hormonio:'Insulina', intensidade:true},
+    {label:'Preciso de alguma coisa doce todos os dias, sem exceção', hormonio:'Insulina', intensidade:true},
+  ]},
+  {id:'fome', tipo:'opcoes', pergunta:'E a fome, como ela se comporta?', opcoes:[
+    {label:'Sinto fome só nos horários certos, nada fora do comum'},
+    {label:'Sinto fome de novo pouco tempo depois de ter comido, mesmo tendo comido bem', hormonio:'Insulina', intensidade:true},
+    {label:'Puxo mais pra pão, massa e frituras do que pra doce', hormonio:'Insulina', intensidade:true},
+    {label:'Como bem e ainda sinto que "falta alguma coisa"', hormonio:'Insulina', intensidade:true},
   ]},
   {id:'pele', tipo:'opcoes', pergunta:'Você notou escurecimento na pele (pescoço, axilas, virilha)?', opcoes:[
     {label:'Não'}, {label:'Leve'}, {label:'Visível'},
@@ -515,7 +523,6 @@ const steps = [
     {label:'Dois desses', hormonio:'MetaboLento', intensidade:true},
     {label:'Os três juntos', hormonio:'MetaboLento', intensidade:true},
   ]},
-  // pausa de reasseguramento acontece aqui (fora do array, chamada manualmente)
   {id:'tentativas', tipo:'opcoes', pergunta:'Você já tentou dieta ou exercício sem resultado nessa fase?', opcoes:[
     {label:'Ainda não tentei nada específico pra menopausa'},
     {label:'Tentei, funcionou um pouco, mas não sustentei'},
@@ -532,6 +539,85 @@ const steps = [
 
 const TOTAL_STEPS = steps.length + 1; // +1 pelo formulário de lead
 let currentIndex = 0;
+
+/* ---------------- PÍLULAS INFORMATIVAS ENTRE BLOCOS ---------------- */
+function minLetra(s){ return s.charAt(0).toLowerCase() + s.slice(1); }
+
+function contarBloco(ids){
+  return ids
+    .map(id => state.opcoesSelecionadas[id])
+    .filter(opt => opt && opt.intensidade)
+    .map(opt => opt.label);
+}
+
+const PILL_CONFIG = {
+  Insulina: {
+    ids:['doce','fome','pele'], tag:'resistência à insulina',
+    zero:'Pelas suas respostas, sua insulina parece estar bem regulada por enquanto. Isso é uma boa notícia, mas seu emagrecimento ainda pode estar travado por outro hormônio. Vamos seguir entendendo o restante do seu perfil.',
+    max:'⚠️ As três coisas que você respondeu apontam pro mesmo lugar: <b>RESISTÊNCIA À INSULINA</b>. A vontade de doce, a fome fora de hora e o escurecimento na pele são sinais clássicos dela, e juntos travam a queima de gordura na barriga mesmo quando você se cuida.',
+    nextLabel:'Vamos ver agora como está seu cortisol?',
+    nextAction: ()=>goTo('estresse'),
+  },
+  Cortisol: {
+    ids:['estresse','sono'], tag:'cortisol alto',
+    zero:'Pelas suas respostas, seu cortisol parece estar sob controle por enquanto. Isso é uma boa notícia, mas seu emagrecimento ainda pode estar travado por outro hormônio. Vamos seguir entendendo o restante do seu perfil.',
+    max:'⚠️ Estresse constante e sono ruim caminham juntos — um alimenta o outro. E isso pode significar <b>CORTISOL</b> alto. Juntos, travam a queima de gordura na barriga, mesmo quando você se esforça na academia.',
+    nextLabel:'Vamos ver agora como está seu estrogênio?',
+    nextAction: ()=>goTo('calorao'),
+  },
+  Estrogenio: {
+    ids:['calorao','pele_cabelo'], tag:'queda de estrogênio',
+    zero:'Pelas suas respostas, seu estrogênio parece estar estável por enquanto. Isso é uma boa notícia, mas seu emagrecimento ainda pode estar travado por outro hormônio. Vamos seguir entendendo o restante do seu perfil.',
+    max:'⚠️ Calorões e mudanças na pele, no cabelo e na libido indicam queda de <b>ESTROGÊNIO</b>. Costumam aparecer juntos porque é o mesmo hormônio — e ele também decide onde seu corpo guarda gordura.',
+    nextLabel:'Só mais algumas perguntas para o seu diagnóstico',
+    nextAction: ()=>{ document.getElementById('reassure-name').textContent = state.nome || 'Você'; showScreen('screen-reassure'); },
+  },
+  MetaboLento: {
+    ids:['energia','unhas'], tag:'tireoide desacelerada',
+    zero:'Pelas suas respostas, sua tireoide parece estar funcionando bem por enquanto. Isso é uma boa notícia, mas seu emagrecimento ainda pode estar travado por outro hormônio. Vamos seguir entendendo o restante do seu perfil.',
+    max:'⚠️ Cansaço extremo e queda de cabelo, unhas fracas ou intestino preso costumam andar juntos e apontam pra <b>TIREOIDE DESACELERADA</b>, porque quando ela trava, o metabolismo inteiro fica mais lento.',
+    nextLabel:'Vamos entender seu histórico com dietas?',
+    nextAction: ()=>goTo('tentativas'),
+  },
+};
+
+function buildPillTexto(hormonioKey){
+  const cfg = PILL_CONFIG[hormonioKey];
+  const sintomas = contarBloco(cfg.ids);
+  const n = sintomas.length;
+  const total = cfg.ids.length;
+  if(n === 0) return cfg.zero;
+  if(n === total) return cfg.max;
+  if(n === 1) return `⚠️ Isso pode ser sinal de <b>${HORMONIO_CAPS[hormonioKey]}</b>. Sozinho, ainda não é o principal vilão, mas vale ficar de olho enquanto avaliamos os outros hormônios.`;
+  return `⚠️ Isso aponta pra <b>${HORMONIO_CAPS[hormonioKey]}</b>. Isso já é um sinal consistente, e explica boa parte da dificuldade de emagrecer mesmo se cuidando.`;
+}
+
+function showPill(hormonioKey){
+  const cfg = PILL_CONFIG[hormonioKey];
+  const texto = buildPillTexto(hormonioKey);
+  document.getElementById('pill-body').innerHTML = `
+    <div class="card light">
+      <p>${texto}</p>
+    </div>
+    <button class="btn" id="pill-next-btn"></button>
+  `;
+  const btn = document.getElementById('pill-next-btn');
+  btn.textContent = cfg.nextLabel;
+  btn.onclick = cfg.nextAction;
+  showScreen('screen-pill');
+}
+
+function showPillObjecao(){
+  document.getElementById('pill-body').innerHTML = `
+    <div class="card light">
+      <p>Isso é mais comum do que parece. Quando você ataca só o sintoma, comendo menos, sem corrigir o hormônio por trás, o corpo reage guardando ainda mais na próxima vez. É esse o motivo do efeito sanfona.</p>
+      <p>Existe um jeito de reverter isso, chamado <b>Jejum Hormonal</b>. Mas já, já a gente fala mais sobre isso.</p>
+    </div>
+    <button class="btn" id="pill-next-btn">Última pergunta antes do seu resultado</button>
+  `;
+  document.getElementById('pill-next-btn').onclick = ()=>goTo('incomodo');
+  showScreen('screen-pill');
+}
 
 /* ---------------- NAVEGAÇÃO ---------------- */
 function showScreen(id){
@@ -560,10 +646,17 @@ function renderStep(){
 
   const body = document.getElementById('quiz-body');
   let html = `<h2 class="q-title">${step.pergunta}</h2>`;
+  if(step.subtitulo){
+    html += `<p class="muted" style="text-align:center;margin:-18px 0 26px;font-size:14px;">${step.subtitulo}</p>`;
+  }
 
   if(step.tipo === 'texto'){
     html += `<input type="text" id="text-input" placeholder="${step.placeholder}" value="${state.nome||''}">`;
     html += `<button class="btn" id="next-btn" onclick="answerText()">CONTINUAR</button>`;
+  } else if(step.tipo === 'numero'){
+    html += `<input type="number" id="text-input" placeholder="${step.placeholder}" min="18" max="99" value="${state.idade||''}">`;
+    html += `<p id="numero-error" style="display:none;color:#F6489A;font-size:13px;margin:-10px 0 16px;text-align:center;">Digite uma idade válida (18–99).</p>`;
+    html += `<button class="btn" id="next-btn" onclick="answerNumero()">CONTINUAR</button>`;
   } else if(step.tipo === 'opcoes'){
     html += `<div class="options">` + step.opcoes.map((o,i)=>`
       <div class="option" data-i="${i}" onclick="selectOption(${i})">
@@ -588,6 +681,18 @@ function answerText(){
   advance();
 }
 
+function answerNumero(){
+  const val = document.getElementById('text-input').value.trim();
+  const errBox = document.getElementById('numero-error');
+  if(!/^\d+$/.test(val) || Number(val) < 18 || Number(val) > 99){
+    if(errBox) errBox.style.display = 'block';
+    return;
+  }
+  if(errBox) errBox.style.display = 'none';
+  state.idade = val;
+  advance();
+}
+
 function selectOption(i){
   const step = steps[currentIndex];
   document.querySelectorAll('.option, .img-option').forEach(el=>el.classList.remove('selected'));
@@ -601,6 +706,7 @@ function nextStep(){
   const step = steps[currentIndex];
   const opt = step.opcoes[state._selected];
   state.respostas[step.id] = opt.label;
+  state.opcoesSelecionadas[step.id] = opt;
   if(opt.hormonio){
     state.scores[opt.hormonio] = (state.scores[opt.hormonio]||0) + 1;
     if(opt.intensidade) state.intensidade++;
@@ -609,43 +715,41 @@ function nextStep(){
 }
 
 function advance(){
-  // pausa de reasseguramento depois da pergunta 'unhas' (última pergunta hormonal)
-  if(steps[currentIndex].id === 'unhas'){
-    document.getElementById('reassure-name').textContent = state.nome || 'Você';
-    showScreen('screen-reassure');
-    return;
-  }
-  if(steps[currentIndex].id === 'incomodo'){
-    showScreen('screen-lead');
-    return;
-  }
+  const id = steps[currentIndex].id;
+  // fim de cada bloco hormonal: mostra a pílula em vez de ir direto pra próxima pergunta
+  if(id === 'pele'){ showPill('Insulina'); return; }
+  if(id === 'sono'){ showPill('Cortisol'); return; }
+  if(id === 'pele_cabelo'){ showPill('Estrogenio'); return; }
+  if(id === 'unhas'){ showPill('MetaboLento'); return; }
+  if(id === 'tentativas'){ showPillObjecao(); return; }
+  if(id === 'incomodo'){ showScreen('screen-lead'); return; }
   currentIndex++;
   renderStep();
 }
 
+const DDD_VALIDOS = ['11','12','13','14','15','16','17','18','19','21','22','24','27','28','31','32','33','34','35','37','38','41','42','43','44','45','46','47','48','49','51','53','54','55','61','62','63','64','65','66','67','68','69','71','73','74','75','77','79','81','82','83','84','85','86','87','88','89','91','92','93','94','95','96','97','98','99'];
+
 function submitLead(){
-  const idade = document.getElementById('input-idade').value.trim();
   const whats = document.getElementById('input-whats').value.trim();
-  const email = document.getElementById('input-email').value.trim();
   const errBox = document.getElementById('lead-error');
 
-  const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const whatsDigits = whats.replace(/\D/g,'');
-  const whatsValido = whatsDigits.length >= 10 && whatsDigits.length <= 11;
-  const idadeValida = /^\d+$/.test(idade) && Number(idade) >= 18 && Number(idade) <= 99;
+  const ddd = whatsDigits.slice(0,2);
+  const restante = whatsDigits.slice(2);
+  const dddValido = DDD_VALIDOS.includes(ddd);
+  const tamanhoValido = whatsDigits.length === 10 || whatsDigits.length === 11;
+  const celularValido = whatsDigits.length === 11 ? restante[0] === '9' : true;
+  const naoRepetido = !/^(\d)\1+$/.test(restante);
+  const whatsValido = dddValido && tamanhoValido && celularValido && naoRepetido;
 
-  if(!idadeValida || !whatsValido || !emailValido){
-    let msgs = [];
-    if(!idadeValida) msgs.push('idade válida (18–99)');
-    if(!whatsValido) msgs.push('WhatsApp com DDD (10 ou 11 números)');
-    if(!emailValido) msgs.push('e-mail válido');
-    errBox.textContent = 'Confere esses campos: ' + msgs.join(', ') + '.';
+  if(!whatsValido){
+    errBox.textContent = 'Confere esse campo: WhatsApp com DDD válido (ex: (11) 98765-4321).';
     errBox.style.display = 'block';
     return;
   }
   errBox.style.display = 'none';
 
-  state.idade = idade; state.whatsapp = whats; state.email = email;
+  state.whatsapp = whats;
   enviarLeadParaPlanilha();
   showScreen('screen-processing');
   setTimeout(renderResult, 1800);
@@ -653,15 +757,11 @@ function submitLead(){
 
 function enviarLeadParaPlanilha(){
   if(!APPS_SCRIPT_URL) return; // ainda não configurado — não trava o quiz
-  const {vilao, sinal} = computeVilao();
   const payload = {
     data: new Date().toISOString(),
     nome: state.nome,
     idade: state.idade,
     whatsapp: state.whatsapp,
-    email: state.email,
-    hormonio: vilao,
-    sinal: sinal,
   };
   // no-cors: não conseguimos ler a resposta, mas o envio funciona (padrão pra Apps Script Web App)
   fetch(APPS_SCRIPT_URL, {
@@ -675,16 +775,26 @@ function enviarLeadParaPlanilha(){
 /* ---------------- RESULTADO ---------------- */
 function computeVilao(){
   const ordem = ['Insulina','Cortisol','Estrogenio','MetaboLento']; // critério de desempate
-  let vilao = ordem[0];
-  ordem.forEach(h=>{ if(state.scores[h] > state.scores[vilao]) vilao = h; });
+  let max = -1;
+  ordem.forEach(h=>{ if(state.scores[h] > max) max = state.scores[h]; });
+
+  if(max <= 0){
+    return { vilao: ordem[0], vilao2: null, sinal: 'amarelo' };
+  }
+  const empatados = ordem.filter(h => state.scores[h] === max);
   const sinal = state.intensidade >= 4 ? 'vermelho' : 'amarelo';
-  return {vilao, sinal};
+  return { vilao: empatados[0], vilao2: empatados[1] || null, sinal };
 }
 
 function renderResult(){
-  const {vilao, sinal} = computeVilao();
-  const r = resultados[`${vilao}-${sinal}`];
+  const {vilao, vilao2, sinal} = computeVilao();
   const nome = state.nome || 'Você';
+
+  const titulo = vilao2
+    ? `${HORMONIO_LABEL[vilao]} e ${HORMONIO_LABEL[vilao2]} estão travando seu emagrecimento juntos`
+    : resultados[`${vilao}-${sinal}`].titulo;
+
+  const significadoTexto = vilao2 ? `${significados[vilao]} ${significados[vilao2]}` : significados[vilao];
 
   const html = `
     <h2 style="text-align:center;font-size:24px;">Olá, <span class="name-highlight">${nome}</span></h2>
@@ -693,52 +803,50 @@ function renderResult(){
     <div class="card-villain">
       <span class="villain-badge">⚠️ Seu principal sabotador identificado</span>
       <span class="signal-tag signal-${sinal}">Sinal ${sinal}</span>
-      <h2 class="result-title signal-text-${sinal}">${r.titulo}</h2>
-      <p>${r.texto}</p>
+      <h2 class="result-title signal-text-${sinal}">${titulo}</h2>
     </div>
 
     <div class="card light">
       <h3 style="font-size:16px;">💡 O que isso significa?</h3>
-      <p>${significados[vilao]}</p>
-    </div>
-
-    <div class="card-villain">
-      <h3 style="font-size:16px;color:inherit;margin-bottom:14px;">O que isso causa em você</h3>
-      <ol class="causa-list">
-        ${causas[vilao].map((c,i)=>`<li><span class="causa-num">${i+1}</span>${c}</li>`).join('')}
-      </ol>
+      <p>${significadoTexto}</p>
     </div>
 
     <div class="card light obs-block">
       <h3 style="font-size:16px;">Observações personalizadas</h3>
-      ${gerarObservacoes().map(o=>`<p>• ${o}</p>`).join('')}
+      <p>${gerarObservacaoPersonalizada(vilao, vilao2)}</p>
     </div>
 
-    <span class="next-step-badge">E o que fazer pra mudar isso?</span>
+    <span class="next-step-badge">O próximo passo</span>
     <div class="card-highlight">
-      <h3 style="font-size:18px;color:#fff;">Chega de dieta maluca. O Desafio Seca Menopausa é pra você.</h3>
-      <p>O Jejum Hormonal é o protocolo feito para a mulher na menopausa emagrecer, perder a pochete e sem passar fome, porque ele une o jejum com estratégias que regulam seus hormônios.</p>
-      <p style="margin-top:10px;">No Desafio Seca Menopausa, você vai:</p>
+      <h3 style="font-size:18px;color:#fff;text-align:center;">O que você deve fazer pra mudar isso?</h3>
+      <p>A melhor estratégia pra você fazer hoje é o <b>JEJUM HORMONAL</b>: um protocolo feito pra mulher na menopausa emagrecer sem passar fome, usando estratégias que regulam os hormônios da menopausa.</p>
+    </div>
+
+    <div class="card light">
+      <p style="margin-bottom:10px;">Em poucos dias, é isso que você vai aprender a fazer no Desafio Seca Menopausa:</p>
+      <p style="font-weight:700;margin-bottom:10px;">No desafio você aprende:</p>
       <ul class="check-list">
-        <li>Entender exatamente qual fase do seu corpo está travando o emagrecimento</li>
-        <li>Aprender a aplicar o jejum certo pra sua fase, sem restrição e sem sofrimento</li>
-        <li>Sentir sua pochete diminuir já nos primeiros dias</li>
-        <li>Reequilibrar cortisol, insulina e estrogênio ao mesmo tempo, comendo de verdade</li>
+        <li>Aplicar o Jejum Hormonal certo pra sua fase, sem dietas malucas</li>
+        <li>Sentir a diferença já nos primeiros dias</li>
+        <li>Aprender os suplementos que funcionam de verdade na menopausa</li>
+        <li>Saber o que comer pra regular os hormônios de forma natural</li>
+        <li>Perder até 5kg durante o processo</li>
       </ul>
-      <a class="btn btn-invert" href="#oferta" style="text-decoration:none;margin-top:6px;">QUERO PARTICIPAR</a>
+      <a class="btn" href="#oferta" style="text-decoration:none;margin-top:6px;">QUERO PARTICIPAR</a>
     </div>
 
     <div class="card-villain">
-      <h2 class="result-title" style="font-size:24px;">Perca até 5kg em 4 dias e seque a barriga da menopausa</h2>
       <div class="doctor-mini">
         <img src="foto-dr-pedro.webp" alt="Dr. Pedro Paulo Nabuco" class="doctor-photo-placeholder" width="56" height="56" loading="lazy" decoding="async" style="object-fit:cover;">
-        <p style="margin:0;">O desafio ao vivo com o Dr. Pedro Paulo Nabuco, médico especialista em emagrecimento na menopausa.</p>
+        <p style="margin:0;">Um desafio com o Dr. Pedro Paulo Nabuco, médico especialista em emagrecimento na menopausa.</p>
       </div>
       <div class="info-chip-row">
         <span class="info-chip">📅 3 a 6 de agosto</span>
+        <span class="info-chip">🎥 4 aulas ao vivo</span>
         <span class="info-chip">🕐 07h da manhã</span>
+        <span class="info-chip">💬 Receba tudo no seu WhatsApp</span>
       </div>
-      <p class="muted" style="font-size:13px;margin:-10px 0 14px;">As aulas ficam gravadas durante todo o desafio, caso você não possa assistir ao vivo.</p>
+      <p class="muted" style="font-size:13px;margin:6px 0 14px;">As aulas ficam gravadas durante todo o desafio, caso você não possa assistir ao vivo.</p>
       <p class="alert-text">⚠️ Não é milagre: assim que você entra, o desafio já começa. Você recebe tarefas simples pra preparar o seu corpo e já começar a ver resultados. Quem faz essa preparação chega com vantagem no encontro ao vivo.</p>
     </div>
 
