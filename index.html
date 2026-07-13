@@ -9,17 +9,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg-0:#280B15;
-    --bg-1:#3A1020;
-    --bg-2:#1A0610;
-    --surface:#3D1626;
-    --surface-2:#4A1B2E;
-    --accent:#EA1B72;
-    --accent-2:#F6489A;
+    --bg-0:#270E0D;
+    --bg-1:#3A1615;
+    --bg-2:#170807;
+    --surface:#331312;
+    --surface-2:#401A18;
+    --accent:#E8621F;
+    --accent-2:#F5813F;
     --text:#FFFFFF;
-    --muted:#D9B8C4;
+    --muted:#D9C2B0;
     --border:rgba(255,255,255,0.14);
-    --green:#3FBF6F;
+    --green:#0FA36E;
     --font-heading:'Playfair Display', Georgia, serif;
     --font-body:'DM Sans', sans-serif;
     --radius-card:24px;
@@ -87,10 +87,10 @@
     width:100%; height:60px; border-radius:var(--radius-btn); border:none; cursor:pointer;
     font-family:var(--font-body); font-weight:700; font-size:15px; letter-spacing:.03em; text-transform:uppercase;
     background:linear-gradient(90deg, var(--accent), var(--accent-2)); color:#fff;
-    box-shadow:0 8px 24px rgba(234,27,114,0.35);
+    box-shadow:0 8px 24px rgba(232,98,31,0.35);
     transition:transform .15s ease, box-shadow .15s ease;
   }
-  .btn:hover{ transform:translateY(-2px); box-shadow:0 10px 28px rgba(234,27,114,0.5); }
+  .btn:hover{ transform:translateY(-2px); box-shadow:0 10px 28px rgba(232,98,31,0.5); }
   .btn:disabled{ opacity:.4; cursor:not-allowed; transform:none; box-shadow:none; }
   .btn-outline{
     background:transparent; border:1px solid var(--border); color:var(--text); box-shadow:none;
@@ -102,7 +102,7 @@
     background:var(--surface); color:var(--text); font-family:var(--font-body); font-size:16px;
     padding:0 18px; margin-bottom:20px; outline:none;
   }
-  input:focus{ border-color:var(--accent); box-shadow:0 0 0 4px rgba(234,27,114,0.2); }
+  input:focus{ border-color:var(--accent); box-shadow:0 0 0 4px rgba(232,98,31,0.2); }
   label.field-label{ font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); margin-bottom:8px; display:block; }
 
   /* options */
@@ -114,7 +114,7 @@
     transition:all .15s ease;
   }
   .option:hover{ background:var(--surface-2); }
-  .option.selected{ border-color:var(--accent); background:var(--surface-2); box-shadow:0 0 0 3px rgba(234,27,114,0.15); }
+  .option.selected{ border-color:var(--accent); background:var(--surface-2); box-shadow:0 0 0 3px rgba(232,98,31,0.15); }
   .radio{ width:20px; height:20px; border-radius:50%; border:2px solid var(--muted); flex:none; position:relative; }
   .option.selected .radio{ border-color:var(--accent); }
   .option.selected .radio::after{
@@ -127,7 +127,7 @@
     background:var(--surface); border:1.5px solid transparent; border-radius:16px; overflow:hidden; cursor:pointer;
     text-align:center; transition:all .15s ease;
   }
-  .img-option.selected{ border-color:var(--accent); box-shadow:0 0 0 3px rgba(234,27,114,0.15); }
+  .img-option.selected{ border-color:var(--accent); box-shadow:0 0 0 3px rgba(232,98,31,0.15); }
   .img-option .thumb{
     height:110px; display:flex; align-items:center; justify-content:center; font-size:34px;
     background:linear-gradient(135deg, var(--surface-2), var(--bg-1));
@@ -138,8 +138,8 @@
   .card{ background:var(--surface); border-radius:var(--radius-card); padding:30px; margin-bottom:20px; }
   .card.light{ background:rgba(255,255,255,0.06); }
   .card-villain{
-    background:linear-gradient(160deg, rgba(234,27,114,0.16), var(--surface) 55%);
-    border:1px solid rgba(234,27,114,0.35);
+    background:linear-gradient(160deg, rgba(232,98,31,0.16), var(--surface) 55%);
+    border:1px solid rgba(232,98,31,0.35);
     border-radius:var(--radius-card); padding:30px; margin-bottom:20px;
   }
   .villain-badge{
@@ -151,15 +151,15 @@
     text-transform:uppercase; letter-spacing:.04em; margin-bottom:14px;
   }
   .signal-amarelo{ background:rgba(240,180,40,0.18); color:#F0C24E; }
-  .signal-vermelho{ background:rgba(234,27,114,0.2); color:var(--accent-2); }
+  .signal-vermelho{ background:rgba(232,98,31,0.2); color:var(--accent-2); }
 
   .result-title{ font-size:28px; margin-bottom:14px; }
 
   /* pausa reasseguramento */
   .reassure-stat{
     display:flex; align-items:center; gap:16px; width:100%; border-radius:18px; margin:22px 0;
-    background:linear-gradient(135deg, rgba(234,27,114,0.14), var(--surface-2));
-    border:1px solid rgba(234,27,114,0.3);
+    background:linear-gradient(135deg, rgba(232,98,31,0.14), var(--surface-2));
+    border:1px solid rgba(232,98,31,0.3);
     padding:20px 22px;
   }
   .reassure-stat .num{ font-family:var(--font-heading); font-size:34px; font-weight:800; color:var(--accent-2); flex:none; }
@@ -178,21 +178,21 @@
   /* depoimento em print (screenshot) — versão fina, pra caber vários */
   .testi-print{
     border-radius:12px; overflow:hidden; margin-bottom:10px;
-    border:1px dashed rgba(0,0,0,0.15); background:#FBF8FB;
+    border:1px dashed rgba(0,0,0,0.15); background:#FBF8F5;
   }
   .testi-print .print-placeholder{
     min-height:70px; width:100%;
     display:flex; align-items:center; justify-content:center; text-align:center;
-    color:#8A7891; font-size:12.5px; padding:14px; background:#F2ECF3;
+    color:#9C8674; font-size:12.5px; padding:14px; background:#F2ECE4;
   }
   .testi-print img{ display:block; width:100%; height:auto; }
   .testi-print .print-label{
-    padding:6px 14px; font-size:11px; color:#8A7891; text-align:center; letter-spacing:.03em;
+    padding:6px 14px; font-size:11px; color:#9C8674; text-align:center; letter-spacing:.03em;
   }
 
   /* card de destaque (chega de dieta maluca) — cor forte, texto branco */
   .card-highlight{
-    background:linear-gradient(160deg, var(--accent) 0%, #A30F49 100%);
+    background:linear-gradient(160deg, var(--accent) 0%, #A8430F 100%);
     border-radius:var(--radius-card); padding:30px; margin-bottom:20px; color:#fff;
   }
   .card-highlight p{ color:rgba(255,255,255,0.92); }
@@ -209,7 +209,7 @@
     display:flex; align-items:center; justify-content:center;
     font-size:9px; text-align:center; color:var(--muted); line-height:1.2; padding:2px;
   }
-  #screen-result .doctor-photo-placeholder{ background:#F2ECF3; border-color:rgba(0,0,0,0.15); color:#8A7891; }
+  #screen-result .doctor-photo-placeholder{ background:#F2ECE4; border-color:rgba(0,0,0,0.15); color:#9C8674; }
 
   html{ scroll-behavior:smooth; }
 
@@ -229,10 +229,10 @@
   .causa-list{ list-style:none; padding:0; margin:0; }
   .causa-list li{ display:flex; gap:12px; align-items:flex-start; padding:9px 0; font-size:15px; font-weight:600; }
   .causa-num{
-    width:24px; height:24px; border-radius:50%; background:rgba(234,27,114,0.18); color:var(--accent-2);
+    width:24px; height:24px; border-radius:50%; background:rgba(232,98,31,0.18); color:var(--accent-2);
     font-size:12.5px; font-weight:800; display:flex; align-items:center; justify-content:center; flex:none; margin-top:1px;
   }
-  #screen-result .causa-num{ background:rgba(220,38,38,0.1); color:#C2185B; }
+  #screen-result .causa-num{ background:rgba(220,38,38,0.1); color:#7C1F1F; }
 
   .next-step-badge{
     display:block; width:fit-content; text-align:center; background:var(--green); color:#fff;
@@ -246,11 +246,16 @@
   /* price card */
   .price-card{
     text-align:center; background:linear-gradient(180deg, var(--surface-2), var(--surface));
-    border:1px solid rgba(234,27,114,0.35); border-radius:var(--radius-card); padding:32px 26px; margin-bottom:20px;
+    border:1px solid rgba(232,98,31,0.35); border-radius:var(--radius-card); padding:32px 26px; margin-bottom:20px;
   }
   .price-old{ text-decoration:line-through; color:var(--muted); font-size:16px; }
   .price-new{ font-family:var(--font-heading); font-size:44px; font-weight:800; color:#fff; margin:6px 0; }
   .price-tag{ font-size:12px; color:var(--muted); margin-bottom:18px; }
+  .promise-badge{
+    display:inline-block; background:var(--accent); color:#fff;
+    font-size:12.5px; font-weight:800; letter-spacing:.02em;
+    padding:6px 16px; border-radius:999px; margin-bottom:14px;
+  }
   .guarantee{ font-size:13px; color:var(--muted); margin-top:14px; }
 
   .progress-header-wrap{ margin-bottom:6px; }
@@ -285,7 +290,7 @@
   .urgency-strip p{ margin:0; font-size:13px; color:var(--muted); }
   #screen-result .urgency-strip{ background:rgba(212,160,23,0.1); border-color:rgba(212,160,23,0.3); }
   #screen-result .urgency-strip .urg-label{ color:#B8860B; }
-  #screen-result .urgency-strip p{ color:#8A7891; }
+  #screen-result .urgency-strip p{ color:#9C8674; }
 
   /* ---------------- TELA DE RESULTADO EM FUNDO BRANCO ---------------- */
   #screen-result{
@@ -293,42 +298,42 @@
     margin:0 -20px;
     padding:32px 20px 60px;
     border-radius:0 0 28px 28px;
-    color:#241528;
+    color:#201410;
   }
-  #screen-result h1, #screen-result h2, #screen-result h3{ color:#241528; }
-  #screen-result .muted{ color:#8A7891; }
+  #screen-result h1, #screen-result h2, #screen-result h3{ color:#201410; }
+  #screen-result .muted{ color:#9C8674; }
   #screen-result .name-highlight{ color:var(--accent); }
   #screen-result .card,
-  #screen-result .card.light{ background:#F7F1F7; }
+  #screen-result .card.light{ background:#F5F0E8; }
   #screen-result .card-villain{
     background:#FFFFFF;
-    border:1px solid rgba(36,21,40,0.1);
-    box-shadow:0 10px 28px rgba(36,21,40,0.08);
+    border:1px solid rgba(26,15,10,0.1);
+    box-shadow:0 10px 28px rgba(26,15,10,0.08);
   }
-  #screen-result .card-villain b{ color:#C2185B; }
-  #screen-result .villain-badge{ color:#C2185B; }
+  #screen-result .card-villain b{ color:#7C1F1F; }
+  #screen-result .villain-badge{ color:#7C1F1F; }
   #screen-result .signal-amarelo{ background:rgba(212,160,23,0.12); color:#B8860B; }
   #screen-result .signal-vermelho{ background:rgba(220,38,38,0.12); color:#DC2626; }
   #screen-result .result-title.signal-text-amarelo{ color:#B8860B; }
   #screen-result .result-title.signal-text-vermelho{ color:#DC2626; }
-  #screen-result .check-list li{ color:#241528; }
-  #screen-result .info-chip{ background:#F7F1F7; color:#241528; }
-  #screen-result .testi{ background:#F7F1F7; }
-  #screen-result .testi.placeholder-testi{ background:#FBF8FB; color:#8A7891; }
-  #screen-result footer.disclaimer{ color:#B7A6BE; }
+  #screen-result .check-list li{ color:#201410; }
+  #screen-result .info-chip{ background:#F5F0E8; color:#201410; }
+  #screen-result .testi{ background:#F5F0E8; }
+  #screen-result .testi.placeholder-testi{ background:#FBF8F5; color:#9C8674; }
+  #screen-result footer.disclaimer{ color:#B8A594; }
   #screen-result .price-card{
-    background:linear-gradient(180deg, #FBEAF2, #FFFFFF);
-    border:1px solid rgba(234,27,114,0.25);
+    background:linear-gradient(180deg, #FBE9DC, #FFFFFF);
+    border:1px solid rgba(232,98,31,0.25);
   }
-  #screen-result .price-old{ color:#8A7891; }
-  #screen-result .price-new{ color:#241528; }
+  #screen-result .price-old{ color:#9C8674; }
+  #screen-result .price-new{ color:#201410; }
 
   .alert-text{ font-size:13.5px; color:#DC2626; font-weight:600; background:rgba(220,38,38,0.08); border-radius:12px; padding:12px 14px; margin:0; }
 
   /* ---------------- HISTÓRIA RELATÁVEL NA PAUSA ---------------- */
   .reassure-story{
     border-radius:18px; margin:22px 0; overflow:hidden;
-    background:var(--surface-2); border:1px solid rgba(234,27,114,0.3);
+    background:var(--surface-2); border:1px solid rgba(232,98,31,0.3);
   }
   .reassure-story .photo-placeholder{
     width:100%; aspect-ratio:4/3;
@@ -394,7 +399,7 @@
       <label class="field-label">WhatsApp (com DDD)</label>
       <input type="tel" id="input-whats" placeholder="(00) 00000-0000">
       <p class="muted" style="font-size:12.5px;margin:-14px 0 20px;">Pra garantir que você não perca o seu diagnóstico, vamos te enviar ele por aqui também.</p>
-      <p id="lead-error" style="display:none;color:#F6489A;font-size:13px;margin:-10px 0 16px;"></p>
+      <p id="lead-error" style="display:none;color:#F5813F;font-size:13px;margin:-10px 0 16px;"></p>
       <button class="btn" onclick="submitLead()">Ver meu diagnóstico</button>
     </div>
   </section>
@@ -661,6 +666,18 @@ function startQuiz(){
 }
 document.querySelector('#screen-landing .btn').setAttribute('onclick','startQuiz()');
 
+// se a pessoa já tem um diagnóstico salvo neste navegador, pula direto pro resultado
+(function checarDiagnosticoSalvo(){
+  try{
+    const salvo = localStorage.getItem('diagnosticoSecaMenopausa');
+    if(!salvo) return;
+    const dadosSalvos = JSON.parse(salvo);
+    if(!dadosSalvos || !dadosSalvos.nome) return;
+    Object.assign(state, dadosSalvos);
+    renderResult();
+  }catch(e){ /* dado corrompido ou localStorage indisponível — segue fluxo normal do quiz */ }
+})();
+
 function renderStep(){
   const step = steps[currentIndex];
   document.getElementById('step-label').textContent = `Passo ${currentIndex+1} de ${TOTAL_STEPS}`;
@@ -687,7 +704,7 @@ function renderStep(){
     html += `<button class="btn" id="next-btn" onclick="answerText()">CONTINUAR</button>`;
   } else if(step.tipo === 'numero'){
     html += `<input type="number" id="text-input" placeholder="${step.placeholder}" min="18" max="99" value="${state.idade||''}">`;
-    html += `<p id="numero-error" style="display:none;color:#F6489A;font-size:13px;margin:-10px 0 16px;text-align:center;">Digite uma idade válida (18–99).</p>`;
+    html += `<p id="numero-error" style="display:none;color:#F5813F;font-size:13px;margin:-10px 0 16px;text-align:center;">Digite uma idade válida (18–99).</p>`;
     html += `<button class="btn" id="next-btn" onclick="answerNumero()">CONTINUAR</button>`;
   } else if(step.tipo === 'opcoes'){
     html += `<div class="options">` + step.opcoes.map((o,i)=>`
@@ -849,6 +866,12 @@ function renderResult(){
   const {vilao, vilao2, sinal} = computeVilao();
   const nome = state.nome || 'Você';
 
+  // salva o diagnóstico no navegador — se a pessoa voltar (ex: clicar no anúncio de novo),
+  // ela cai direto aqui em vez de refazer o quiz
+  try{
+    localStorage.setItem('diagnosticoSecaMenopausa', JSON.stringify(state));
+  }catch(e){ /* localStorage indisponível — segue normal sem salvar */ }
+
   const titulo = vilao2
     ? `${HORMONIO_LABEL[vilao]} e ${HORMONIO_LABEL[vilao2]} estão travando seu emagrecimento juntos`
     : resultados[`${vilao}-${sinal}`].titulo;
@@ -874,14 +897,18 @@ function renderResult(){
     <span class="next-step-badge">O próximo passo</span>
     <div class="card-highlight">
       <h3 style="font-size:18px;color:#fff;text-align:center;">O que você deve fazer pra mudar isso?</h3>
-      <p>Você já sabe o que está sabotando o seu emagrecimento. Agora, você precisa tomar a decisão de se livrar dele de vez.</p>
+      <p>A saída é regular esse hormônio com o <b>JEJUM HORMONAL</b>: um protocolo que ensina seu corpo a queimar gordura, enquanto regula seus hormônios. É exatamente isso que você aprende no Desafio Seca Menopausa.</p>
     </div>
 
     <div class="card light">
-      <p>O <b>Desafio Seca Menopausa</b> é pra quem já tentou de tudo: protocolo de internet, nutricionista da cidade, dieta por conta própria — e sempre voltou pra estaca zero.</p>
-      <p>Presta atenção: o problema não é você. São os seus hormônios totalmente desregulados, guardando gordura em vez de queimar.</p>
-      <p>O <b>Desafio Seca Menopausa</b> é diferente de tudo o que você já tentou. São 4 dias ao vivo com o Dr. Pedro, te ensinando a emagrecer regulando os hormônios da menopausa — pra você sair do efeito sanfona e não voltar nunca mais.</p>
-      <p style="font-weight:700;">Não é mais uma tentativa. É a última.</p>
+      <p style="font-weight:700;margin-bottom:10px;">O desafio é pra você que:</p>
+      <ul class="check-list">
+        <li>Já tentou de tudo: protocolo de internet, nutricionista, dieta por conta própria, e sempre voltou pra estaca zero</li>
+        <li>Está na menopausa e sente que emagrecer ficou muito mais difícil do que antes</li>
+        <li>Quer resultado sem passar fome e sem dieta maluca</li>
+        <li>Está pronta pra parar de tentar sozinha e aprender o caminho certo</li>
+      </ul>
+      <p style="font-weight:700;color:var(--accent);">Não é mais uma tentativa. É a última.</p>
     </div>
 
     <div class="card light">
@@ -890,6 +917,8 @@ function renderResult(){
         <li>Sugestões de cardápio e cronograma de jejum adequados pra sua rotina</li>
         <li>Rotina que acelera o metabolismo com ingredientes que você já tem em casa</li>
         <li>Ebooks com receitas pra usar pelo resto da vida</li>
+        <li>4 aulas ao vivo com o Dr. Pedro Paulo Nabuco</li>
+        <li>Tarefas práticas desde o primeiro dia, pra você já começar a ver resultado</li>
       </ul>
       <p>Por <b>R$29</b>, você entra pra um desafio diferente de tudo o que você já tentou.</p>
       <a class="btn" href="#oferta" style="text-decoration:none;margin-top:6px;">QUERO PARTICIPAR</a>
@@ -907,14 +936,14 @@ function renderResult(){
         <span class="info-chip">💬 Receba tudo no seu WhatsApp</span>
       </div>
       <p class="muted" style="font-size:13px;margin:6px 0 14px;">As aulas ficam gravadas durante todo o desafio, caso você não possa assistir ao vivo.</p>
-      <p class="alert-text">Assim que você entra, o desafio já começa, com tarefas simples pra ir preparando seu corpo até o nosso encontro ao vivo.</p>
     </div>
 
     <div class="price-card" id="oferta">
+      <span class="promise-badge">🔥 Perca até 5kg durante o desafio</span>
       <div class="price-old">R$ 147</div>
       <div class="price-new">R$ 29</div>
       <div class="price-tag">pagamento único</div>
-      <a class="btn" href="https://pay.hotmart.com/N106363772B?checkoutMode=10&bid=1782320716137&src=quiz" onclick="fbq('track', 'InitiateCheckout')" style="text-decoration:none;">QUERO ENTRAR NO DESAFIO SECA MENOPAUSA</a>
+      <a class="btn" href="https://pay.hotmart.com/N106363772B?checkoutMode=10&bid=1782320716137&src=quiz" onclick="fbq('track', 'InitiateCheckout')" style="text-decoration:none;">QUERO EMAGRECER NA MENOPAUSA</a>
       <p class="guarantee">🛡️ Garantia incondicional de 7 dias: se em até 7 dias você sentir que o desafio não é pra você, devolvemos 100% do seu investimento — sem perguntas, sem burocracia.</p>
     </div>
 
