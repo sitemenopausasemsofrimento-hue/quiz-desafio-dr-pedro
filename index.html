@@ -4,9 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Quiz — Desafio Seca Menopausa</title>
+<meta name="description" content="Descubra em poucos minutos qual hormônio está travando seu emagrecimento na menopausa e receba seu diagnóstico personalizado.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<!-- fontes carregadas sem bloquear a renderização da página -->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@400;500;700&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@400;500;700&display=swap"></noscript>
 <style>
   :root{
     --bg-0:#270E0D;
@@ -423,7 +427,7 @@ fbq('init', '873230481338340');
   })();
 </script>
 
-<div id="app">
+<main id="app">
 
   <!-- LANDING -->
   <section class="screen active" id="screen-landing">
@@ -493,7 +497,7 @@ fbq('init', '873230481338340');
     <div id="result-body"></div>
   </section>
 
-</div>
+</main>
 
 <script>
 /* ============================================================
