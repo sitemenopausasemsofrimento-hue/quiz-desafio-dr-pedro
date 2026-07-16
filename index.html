@@ -362,6 +362,34 @@ t.src=v;s=b.getElementsByTagName(e)[0];
 s.parentNode.insertBefore(t,s)}(window, document,'script',
 'https://connect.facebook.net/en_US/fbevents.js');
 fbq('init', '873230481338340');
+
+// dispara um evento no pixel do navegador E manda a cópia server-side pro Meta Conversions API,
+// usando o mesmo eventID nos dois pra evitar contagem duplicada no Gerenciador de Eventos.
+function dispararEventoMeta(eventName, extraParams){
+  try{
+    const eventId = crypto.randomUUID();
+    function getCookieMeta(nome){
+      const match = document.cookie.match(new RegExp('(?:^|; )' + nome + '=([^;]*)'));
+      return match ? decodeURIComponent(match[1]) : '';
+    }
+    const fbc = getCookieMeta('_fbc');
+    const fbp = getCookieMeta('_fbp');
+
+    fbq('track', eventName, extraParams || {}, { eventID: eventId });
+
+    fetch('/api/track', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        eventName: eventName,
+        eventSourceUrl: window.location.href,
+        fbc: fbc,
+        fbp: fbp,
+        eventId: eventId,
+      }),
+    }).catch(()=>{ /* falha silenciosa: não deve travar a página */ });
+  }catch(e){ /* fbq indisponível ou erro de rede — não deve travar a experiência */ }
+}
 </script>
 <!-- End Meta Pixel Code -->
 </head>
@@ -871,7 +899,7 @@ function submitLead(){
   errBox.style.display = 'none';
 
   state.whatsapp = whats;
-  fbq('track', 'Lead');
+  dispararEventoMeta('Lead');
   enviarLeadParaPlanilha();
 
   // quiz já terminou nesse ponto: processa e mostra o resultado
@@ -1013,7 +1041,7 @@ function renderResult(){
       <div class="price-old">R$ 147</div>
       <div class="price-new">R$ 29</div>
       <div class="price-tag">pagamento único</div>
-      <a class="btn" href="https://pay.hotmart.com/N106363772B?checkoutMode=10&bid=1782320716137&src=quiz" onclick="fbq('track', 'InitiateCheckout')" style="text-decoration:none;">QUERO EMAGRECER NA MENOPAUSA</a>
+      <a class="btn" href="https://pay.hotmart.com/N106363772B?checkoutMode=10&bid=1782320716137&src=quiz" onclick="dispararEventoMeta('InitiateCheckout')" style="text-decoration:none;">QUERO EMAGRECER NA MENOPAUSA</a>
       <p class="guarantee">🛡️ Garantia incondicional de 7 dias: se em até 7 dias você sentir que o desafio não é pra você, devolvemos 100% do seu investimento — sem perguntas, sem burocracia.</p>
     </div>
 
@@ -1046,32 +1074,7 @@ function renderResult(){
 
 <!-- Meta Conversions API (server-side) — PageView com dedup via eventID -->
 <script>
-(function(){
-  function getCookie(nome){
-    const match = document.cookie.match(new RegExp('(?:^|; )' + nome + '=([^;]*)'));
-    return match ? decodeURIComponent(match[1]) : '';
-  }
-
-  const eventId = crypto.randomUUID();
-  const fbc = getCookie('_fbc');
-  const fbp = getCookie('_fbp');
-
-  // dispara no pixel do navegador com o mesmo eventID (evita evento duplicado no Gerenciador de Eventos)
-  fbq('track', 'PageView', {}, { eventID: eventId });
-
-  // envia a cópia server-side pro Conversions API
-  fetch('/api/track', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      eventName: 'PageView',
-      eventSourceUrl: window.location.href,
-      fbc: fbc,
-      fbp: fbp,
-      eventId: eventId,
-    }),
-  }).catch(()=>{ /* falha silenciosa: não deve travar a página */ });
-})();
+dispararEventoMeta('PageView');
 </script>
 </body>
 </html>
