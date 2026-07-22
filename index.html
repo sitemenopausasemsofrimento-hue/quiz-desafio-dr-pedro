@@ -544,7 +544,7 @@ function dispararEventoMeta(eventName, extraParams){
 // Enquanto estiver vazia, o quiz funciona normal mas não salva os leads em nenhum lugar.
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyWtJSaysBsRtSsNFZDC0wwilc_Gnx6Khzw5Kyx8jQ1F9gKa32TRwEriNbdZWW9ZouB/exec';
 
-const state = { nome:'', respostas:{}, opcoesSelecionadas:{}, scores:{Cortisol:0, Insulina:0, MetaboLento:0}, intensidadePorHormonio:{Cortisol:0, Insulina:0, MetaboLento:0} };
+const state = { nome:'', respostas:{}, respostasIdx:{}, opcoesSelecionadas:{}, scores:{Cortisol:0, Insulina:0, MetaboLento:0}, intensidadePorHormonio:{Cortisol:0, Insulina:0, MetaboLento:0} };
 
 const HORMONIO_LABEL = {Cortisol:'Cortisol', Insulina:'Insulina', MetaboLento:'Tireoide'};
 const HORMONIO_CAPS = {Cortisol:'CORTISOL ALTO', Insulina:'RESISTÊNCIA À INSULINA', MetaboLento:'TIREOIDE DESACELERADA'};
@@ -559,15 +559,15 @@ const resultados = {
 };
 
 const significados = {
-  Cortisol: 'Seu corpo está em modo de alerta constante — e enquanto ele achar que precisa se proteger, vai guardar gordura em vez de queimar.',
+  Cortisol: 'Seu corpo está em modo de alerta constante. Enquanto ele achar que precisa se proteger, vai guardar gordura em vez de queimar.',
   Insulina: 'Seu corpo aprendeu a guardar energia e está com dificuldade pra acessar as reservas de gordura.',
   MetaboLento: 'Sua tireoide está rodando mais devagar do que deveria, e isso afeta tudo: do peso à energia do seu dia.',
 };
 
 const causas = {
-  Cortisol: ['Gordura que se acumula na barriga, mesmo comendo direito', 'Sono que não recupera, te deixando sempre cansada', 'Ansiedade e irritabilidade que pioram ao longo do dia', 'Corpo em modo de proteção, guardando energia em vez de queimar'],
-  Insulina: ['Fome fora de hora e vontade de doce incontrolável', 'Gordura acumulada, principalmente na região da barriga', 'Platô de peso, mesmo fazendo tudo certo', 'Frustração com dietas que já não funcionam mais como antes'],
-  MetaboLento: ['Cansaço extremo, mesmo dormindo bem', 'Queda de cabelo e unhas mais fracas', 'Intestino preso e digestão mais lenta', 'Sensação de que tudo ficou mais devagar'],
+  Cortisol: ['<b>Gordura que se acumula na barriga</b>, mesmo comendo direito', '<b>Sono que não recupera</b>, te deixando sempre cansada', '<b>Ansiedade e irritabilidade</b> que pioram ao longo do dia', 'Corpo em modo de proteção, <b>guardando energia em vez de queimar</b>'],
+  Insulina: ['<b>Fome fora de hora</b> e vontade de doce incontrolável', '<b>Gordura acumulada</b>, principalmente na região da barriga', '<b>Platô de peso</b>, mesmo fazendo tudo certo', 'Frustração com dietas que <b>já não funcionam mais como antes</b>'],
+  MetaboLento: ['<b>Cansaço extremo</b>, mesmo dormindo bem', '<b>Queda de cabelo</b> e unhas mais fracas', '<b>Intestino preso</b> e digestão mais lenta', 'Sensação de que <b>tudo ficou mais devagar</b>'],
 };
 
 const ALIADO_NATURAL = {
@@ -584,7 +584,7 @@ const ALIADO_CONTEXTO = {
 
 function gerarObservacaoPersonalizada(vilao, vilao2){
   if(vilao2){
-    return `Dois aliados naturais aqui: ${ALIADO_NATURAL[vilao]}, e ${ALIADO_NATURAL[vilao2]}. Isso é só o começo — no <b>DESAFIO SECA MENOPAUSA</b> você aprende o protocolo completo com o Dr. Pedro.`;
+    return `Dois aliados naturais aqui: ${ALIADO_NATURAL[vilao]}, e ${ALIADO_NATURAL[vilao2]}. Isso é só o começo: no <b>DESAFIO SECA MENOPAUSA</b> você aprende o protocolo completo com o Dr. Pedro.`;
   }
   return `Um aliado natural ${ALIADO_CONTEXTO[vilao]} é ${ALIADO_NATURAL[vilao]}. Fique tranquila: no <b>DESAFIO SECA MENOPAUSA</b> você vai aprender muito mais sobre isso com o Dr. Pedro.`;
 }
@@ -669,21 +669,21 @@ const PILL_CONFIG = {
   Insulina: {
     ids:['doce','fome'],
     zero:'Insulina parece regulada por enquanto. Seguindo a avaliação dos outros hormônios.',
-    parcial:'⚠️ Pode ser sinal de <b>RESISTÊNCIA À INSULINA</b>. Vamos confirmar com os próximos hormônios — e te mostrar o que fazer com isso.',
+    parcial:'⚠️ Pode ser sinal de <b>RESISTÊNCIA À INSULINA</b>. Vamos confirmar com os próximos hormônios e te mostrar o que fazer com isso.',
     max:'⚠️ Vontade de doce + fome fora de hora = sinal de <b>RESISTÊNCIA À INSULINA</b> travando sua barriga. A boa notícia: existe um método específico pra isso, e você já vai entender qual é.',
     nextAction: ()=>advanceComBanner('curiosidade_jejum'),
   },
   Cortisol: {
     ids:['estresse','sono'],
     zero:'Cortisol parece sob controle por enquanto. Seguindo a avaliação dos outros hormônios.',
-    parcial:'⚠️ Pode ser sinal de <b>CORTISOL ALTO</b>. Vamos confirmar com os próximos hormônios — e te mostrar o caminho certo.',
+    parcial:'⚠️ Pode ser sinal de <b>CORTISOL ALTO</b>. Vamos confirmar com os próximos hormônios e te mostrar o caminho certo.',
     max:'⚠️ Estresse constante + sono ruim = <b>CORTISOL ALTO</b> travando a queima de gordura na barriga.',
     nextAction: ()=>advanceComBanner('curiosidade_estrategia'),
   },
   MetaboLento: {
     ids:['energia','unhas'],
     zero:'Tireoide parece funcionando bem por enquanto. Seguindo a avaliação.',
-    parcial:'⚠️ Pode ser sinal de <b>TIREOIDE DESACELERADA</b>. Vamos confirmar com os próximos hormônios — e te mostrar o caminho certo.',
+    parcial:'⚠️ Pode ser sinal de <b>TIREOIDE DESACELERADA</b>. Vamos confirmar com os próximos hormônios e te mostrar o caminho certo.',
     max:'⚠️ Cansaço extremo + queda de cabelo, unhas fracas ou intestino preso = <b>TIREOIDE DESACELERADA</b> travando seu metabolismo.',
     nextAction: ()=>showPillObjecao(), // não há mais pergunta entre unhas e a pílula de objeção
   },
@@ -720,7 +720,7 @@ function showPillObjecao(){
   document.getElementById('pill-body').innerHTML = `
     <div class="card-villain" style="padding:16px 18px;margin-bottom:22px;"><p style="margin:0;">${banner}</p></div>
     <div class="card light">
-      <p>Atacar só o sintoma sem corrigir o hormônio é o motivo do efeito sanfona. A solução tem nome: <b>Jejum Hormonal</b> — é isso que você aprende no <b>Desafio Seca Menopausa</b>.</p>
+      <p>Atacar só o sintoma sem corrigir o hormônio é o motivo do efeito sanfona. A solução tem nome: <b>Jejum Hormonal</b>. É isso que você aprende no <b>Desafio Seca Menopausa</b>.</p>
       <ul class="check-list">
         <li>Ensina seu corpo a queimar a própria gordura como fonte de energia, em vez de só guardar</li>
         <li>Usa estratégias naturais na alimentação que regulam os hormônios da menopausa</li>
@@ -856,6 +856,8 @@ function nextStep(){
   const opt = step.opcoes[state._selected];
   state.respostas[step.id] = opt.label;
   state.opcoesSelecionadas[step.id] = opt;
+  if(!state.respostasIdx) state.respostasIdx = {};
+  state.respostasIdx[step.id] = state._selected;
   if(opt.hormonio){
     state.scores[opt.hormonio] = (state.scores[opt.hormonio]||0) + 1;
     if(opt.intensidade) state.intensidadePorHormonio[opt.hormonio] = (state.intensidadePorHormonio[opt.hormonio]||0) + 1;
@@ -926,6 +928,179 @@ function enviarLeadParaPlanilha(){
   }).catch(()=>{ /* falha silenciosa: não deve travar a experiência da usuária */ });
 }
 
+/* ---------------- PERSONALIZAÇÃO DO RESULTADO ---------------- */
+// monta a frase "Você contou que..." só com o que a pessoa marcou de verdade,
+// pra página nunca afirmar um sintoma que ela não relatou
+const BLOCO_IDS_ESPELHO = {Insulina:['doce','fome'], Cortisol:['estresse','sono'], MetaboLento:['energia','unhas']};
+
+const ESPELHO_CHUNKS = {
+  doce: 'sente <b>muita vontade de doce</b>',
+  fome: 'sente <b>fome fora de hora</b>',
+  estresse: '<b>vive estressada</b>',
+  sono: '<b>dorme mal</b>',
+  energia: 'sente um <b>cansaço que não passa</b>',
+  unhas: 'notou <b>mudanças no cabelo, nas unhas ou no intestino</b>',
+};
+
+const ESPELHO_FECHO_SOLO = {
+  Insulina: {dois:'Esses são os dois sinais mais clássicos de <b>resistência à insulina</b> na menopausa.', um:'Esse é um dos sinais mais clássicos de <b>resistência à insulina</b> na menopausa.'},
+  Cortisol: {dois:'Esses são os dois sinais mais claros de <b>cortisol alto</b> travando seu corpo.', um:'Esse é um dos sinais mais claros de <b>cortisol alto</b> agindo no seu corpo.'},
+  MetaboLento: {dois:'Esses são os indícios típicos de <b>tireoide desacelerada</b>.', um:'Esse é um indício típico de <b>tireoide desacelerada</b>.'},
+};
+
+const ESPELHO_FECHO_COMBO = {
+  'Cortisol|Insulina': 'Uma coisa puxa a outra: o estresse aumenta a fome, e o corpo assustado guarda tudo como gordura. <b>Não é falta de força de vontade.</b> É o seu corpo trabalhando contra você.',
+  'Insulina|MetaboLento': 'Ou seja: seu corpo guarda energia demais e gasta de menos. Por isso <b>o peso não desce, mesmo comendo pouco</b>.',
+  'Cortisol|MetaboLento': 'Seu corpo entrou em modo de defesa: segura a gordura pra se proteger e desliga o gasto de energia. <b>Não é preguiça.</b> É o corpo se defendendo do jeito errado.',
+};
+
+const HORM_NOME_CAUSA = {Insulina:'a resistência à insulina', Cortisol:'o cortisol alto', MetaboLento:'a tireoide desacelerada'};
+const HORM_POSS = {Insulina:'sua insulina', Cortisol:'seu cortisol', MetaboLento:'sua tireoide'};
+const HORM_SEGUNDO = {
+  Insulina:{nome:'Sua <b>insulina</b>', pron:'dela'},
+  Cortisol:{nome:'Seu <b>cortisol</b>', pron:'dele'},
+  MetaboLento:{nome:'Sua <b>tireoide</b>', pron:'dela'},
+};
+
+// causas no empate: 2 de cada hormônio, escolhidas a dedo pra não repetir item parecido
+const CAUSAS_COMBO = {
+  'Cortisol|Insulina': [
+    '<b>Gordura que se acumula na barriga</b>, mesmo comendo direito',
+    '<b>Fome fora de hora</b> e vontade de doce incontrolável',
+    '<b>Sono que não recupera</b>, te deixando sempre cansada',
+    '<b>Ansiedade e irritabilidade</b> que pioram ao longo do dia',
+  ],
+  'Insulina|MetaboLento': [
+    '<b>Fome fora de hora</b> e vontade de doce incontrolável',
+    '<b>Gordura acumulada</b>, principalmente na região da barriga',
+    '<b>Cansaço extremo</b>, mesmo dormindo bem',
+    'Sensação de que <b>tudo ficou mais devagar</b>',
+  ],
+  'Cortisol|MetaboLento': [
+    '<b>Gordura que se acumula na barriga</b>, mesmo comendo direito',
+    '<b>Sono que não recupera</b>, te deixando sempre cansada',
+    '<b>Cansaço extremo</b> que não passa nem descansando',
+    'Sensação de que <b>tudo ficou mais devagar</b>',
+  ],
+};
+
+const OFERTA_LINHA = {
+  Insulina: 'Protocolo específico pro seu caso (<b>resistência à insulina</b>): cortar a vontade de doce e destravar a queima de gordura.',
+  Cortisol: 'Protocolo específico pro seu caso (<b>cortisol alto</b>): baixar o hormônio do estresse e voltar a queimar gordura.',
+  MetaboLento: 'Protocolo específico pro seu caso (<b>tireoide desacelerada</b>): acelerar o metabolismo de forma natural.',
+};
+
+function chunksDe(hormonio){
+  const sel = state.opcoesSelecionadas || {};
+  return BLOCO_IDS_ESPELHO[hormonio]
+    .filter(id => sel[id] && sel[id].intensidade)
+    .map(id => ESPELHO_CHUNKS[id]);
+}
+
+function juntarChunks(arr){
+  if(arr.length === 1) return arr[0];
+  return arr.slice(0,-1).join(', ') + ' e ' + arr[arr.length-1];
+}
+
+function fraseEspelho(vilao, vilao2){
+  let chunks = chunksDe(vilao);
+  if(vilao2) chunks = chunks.concat(chunksDe(vilao2));
+  if(!chunks.length) return '';
+  const intro = 'Você contou que ' + juntarChunks(chunks) + '.';
+  let fecho;
+  if(vilao2){
+    fecho = ESPELHO_FECHO_COMBO[[vilao, vilao2].sort().join('|')] || '';
+  } else {
+    fecho = chunks.length >= 2 ? ESPELHO_FECHO_SOLO[vilao].dois : ESPELHO_FECHO_SOLO[vilao].um;
+  }
+  return `<p style="margin-top:6px;">${intro} ${fecho}</p>`;
+}
+
+function fraseIdade(){
+  const idade = parseInt(state.idade, 10);
+  if(!idade || idade < 18) return '';
+  const comparacao = idade >= 45 ? 'não responde mais como aos 35' : 'já não responde como antes';
+  return `<p>Aos <b>${idade} anos</b>, seu corpo ${comparacao}. Por isso <b>o que funcionava antes parou de funcionar</b>.</p>`;
+}
+
+function fraseSegundoHormonio(vilao, vilao2){
+  const scores = state.scores || {};
+  const outros = ['Insulina','Cortisol','MetaboLento'].filter(h => h !== vilao && h !== vilao2 && (scores[h]||0) > 0);
+  if(!outros.length) return '';
+  if(outros.length > 1){
+    outros.sort((a,b) => (scores[b]||0) - (scores[a]||0));
+    if((scores[outros[0]]||0) === (scores[outros[1]]||0)){
+      return `<p style="font-size:14px;">Seus outros hormônios também mostraram sinais no teste. Pode ficar tranquila: o protocolo cuida deles junto.</p>`;
+    }
+  }
+  const seg = HORM_SEGUNDO[outros[0]];
+  return `<p style="font-size:14px;">${seg.nome} também mostrou sinais no teste. Pode ficar tranquila: o protocolo cuida ${seg.pron} junto.</p>`;
+}
+
+function blocoCausas(vilao, vilao2){
+  let lista, titulo;
+  if(vilao2){
+    lista = CAUSAS_COMBO[[vilao, vilao2].sort().join('|')];
+    titulo = 'O que esses dois hormônios estão causando em você agora:';
+  } else {
+    lista = causas[vilao];
+    const temSintomaMarcado = chunksDe(vilao).length > 0;
+    titulo = temSintomaMarcado
+      ? `O que ${HORM_NOME_CAUSA[vilao]} está causando em você agora:`
+      : `O que ${HORM_NOME_CAUSA[vilao]} costuma causar nessa fase:`;
+  }
+  if(!lista) return '';
+  return `<div class="card light"><p style="font-weight:700;margin:0 0 10px;">${titulo}</p><ul class="causa-list">` +
+    lista.map((c,i)=>`<li><span class="causa-num">${i+1}</span><span>${c}</span></li>`).join('') +
+    `</ul></div>`;
+}
+
+function idxRespostaJejum(){
+  const rIdx = state.respostasIdx || {};
+  if(typeof rIdx['curiosidade_jejum'] === 'number') return rIdx['curiosidade_jejum'];
+  // diagnóstico salvo antes desta versão: casa pelo texto da resposta
+  const label = (state.respostas || {})['curiosidade_jejum'];
+  const stepJejum = steps.find(s => s.id === 'curiosidade_jejum');
+  const i = stepJejum ? stepJejum.opcoes.findIndex(o => o.label === label) : -1;
+  return i >= 0 ? i : 2;
+}
+
+function textoJejum(vilao, vilao2){
+  const poss = vilao2 ? 'seus hormônios' : HORM_POSS[vilao];
+  const idx = idxRespostaJejum();
+  if(idx === 0) return `Você disse que <b>já tentou jejum e não funcionou</b>. Faz sentido: jejum comum não regula hormônio. O <b>Jejum Hormonal</b> faz o contrário: primeiro regula ${poss}, depois queima a gordura. É isso que você aprende no <b>Desafio Seca Menopausa</b>.`;
+  if(idx === 1) return `Você disse que <b>tentou jejum e não conseguiu manter</b>. Normal: sem regular o hormônio antes, o corpo luta contra você. O <b>Jejum Hormonal</b> começa pelo hormônio, no ritmo do seu corpo. É isso que você aprende no <b>Desafio Seca Menopausa</b>.`;
+  return `A saída é o <b>Jejum Hormonal</b>: um protocolo que primeiro regula ${poss} e depois ensina seu corpo a queimar gordura. Você não precisa de experiência nenhuma: o desafio começa do zero, no seu ritmo. É exatamente isso que você aprende no <b>Desafio Seca Menopausa</b>.`;
+}
+
+function linhaOferta(vilao, vilao2){
+  if(vilao2) return 'Protocolo específico pro seu caso: regular <b>os dois hormônios ao mesmo tempo</b> enquanto o corpo volta a queimar gordura.';
+  return OFERTA_LINHA[vilao];
+}
+
+// contador regressivo real até a abertura da turma (3 de agosto, horário de Brasília)
+let contadorInterval = null;
+function iniciarContador(){
+  const el = document.getElementById('contador-vagas');
+  if(!el) return;
+  const alvo = new Date('2026-08-03T00:00:00-03:00').getTime();
+  function atualizar(){
+    const diff = alvo - Date.now();
+    if(diff <= 0){
+      el.textContent = 'Últimas vagas da turma de agosto';
+      if(contadorInterval) clearInterval(contadorInterval);
+      return;
+    }
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    el.textContent = `${d} dias : ${String(h).padStart(2,'0')} horas : ${String(m).padStart(2,'0')} min`;
+  }
+  if(contadorInterval) clearInterval(contadorInterval);
+  atualizar();
+  contadorInterval = setInterval(atualizar, 30000);
+}
+
 /* ---------------- RESULTADO ---------------- */
 function computeVilao(){
   const ordem = ['Insulina','Cortisol','MetaboLento'];
@@ -976,7 +1151,16 @@ function renderResult(){
     ? `${HORMONIO_LABEL[vilao]} e ${HORMONIO_LABEL[vilao2]} estão travando seu emagrecimento juntos`
     : resultados[`${vilao}-${sinal}`].titulo;
 
-  const significadoTexto = vilao2 ? `${significados[vilao]} ${significados[vilao2]}` : significados[vilao];
+  const espelho = fraseEspelho(vilao, vilao2);
+  // no empate a frase-espelho combinada já explica o mecanismo, então o significado duplo (longo) só entra se não houver espelho
+  let significadoHtml = '';
+  if(!vilao2){
+    significadoHtml = `<p style="margin-top:6px;">${significados[vilao]}</p>`;
+  } else if(!espelho){
+    significadoHtml = `<p style="margin-top:6px;">${significados[vilao]} ${significados[vilao2]}</p>`;
+  }
+
+  const microBtn = `<p class="muted" style="text-align:center;font-size:12.5px;margin:10px 0 0;">Pagamento único · Acesso imediato pelo WhatsApp · Garantia de 7 dias</p>`;
 
   const html = `
     <h2 style="text-align:center;font-size:24px;">Olá, <span class="name-highlight">${nome}</span></h2>
@@ -986,7 +1170,29 @@ function renderResult(){
       <span class="villain-badge">⚠️ Seu principal sabotador identificado</span>
       <span class="signal-tag signal-${sinal}">Sinal ${sinal}</span>
       <h2 class="result-title signal-text-${sinal}">${titulo}</h2>
-      <p style="margin-top:6px;">${significadoTexto}</p>
+      ${espelho}
+      ${significadoHtml}
+      ${fraseIdade()}
+      ${fraseSegundoHormonio(vilao, vilao2)}
+    </div>
+
+    ${blocoCausas(vilao, vilao2)}
+
+    <!-- ========== BLOCO DO VÍDEO (DESATIVADO, invisível pra visitante) ==========
+    PARA ATIVAR: 1) apague a linha de cima (a que começa o comentário) e a linha final do bloco
+    2) cole o código de incorporação do VTurb no lugar indicado abaixo
+    <div class="card light" style="text-align:center;">
+      <p style="font-weight:700;margin:0 0 6px;">Assista antes de continuar (2 min)</p>
+      <p style="font-size:14.5px;">O Dr. Pedro Paulo Nabuco explica nesse vídeo o que os hormônios da menopausa fazem com o seu corpo, e por que dieta e academia sozinhas não resolvem, principalmente no seu caso.</p>
+      COLE-O-EMBED-DO-VTURB-AQUI
+      <p class="muted" style="font-size:13px;margin:10px 0 0;">Se você já sabe que quer participar, pode ir direto pra inscrição aqui embaixo. 👇</p>
+    </div>
+    ========== FIM DO BLOCO DO VÍDEO ========== -->
+
+    <span class="next-step-badge">O próximo passo</span>
+    <div class="card-highlight">
+      <h3 style="font-size:18px;color:#fff;text-align:center;">O que você deve fazer pra mudar isso?</h3>
+      <p>${textoJejum(vilao, vilao2)}</p>
     </div>
 
     <div class="card light obs-block">
@@ -994,18 +1200,14 @@ function renderResult(){
       <p>${gerarObservacaoPersonalizada(vilao, vilao2)}</p>
     </div>
 
-    <span class="next-step-badge">O próximo passo</span>
-    <div class="card-highlight">
-      <h3 style="font-size:18px;color:#fff;text-align:center;">O que você deve fazer pra mudar isso?</h3>
-      <p>A saída é regular esse hormônio com o <b>JEJUM HORMONAL</b>: um protocolo que ensina seu corpo a queimar gordura, enquanto regula seus hormônios. É exatamente isso que você aprende no Desafio Seca Menopausa.</p>
-    </div>
+    <p style="font-weight:700;text-align:center;margin:0 0 10px;">Foi esse protocolo que fez a diferença pra elas:</p>
+    <div class="testi-print"><img src="depoimento-print-01.webp" alt="Depoimento" width="1169" height="372" loading="lazy" decoding="async"></div>
 
-    <div class="card light">
+    <div class="card light" style="margin-top:20px;">
       <p style="font-weight:700;margin-bottom:10px;">O desafio é pra você que:</p>
       <ul class="check-list">
         <li>Já tentou de tudo: protocolo de internet, nutricionista, dieta por conta própria, e sempre voltou pra estaca zero</li>
-        <li>Está na menopausa e sente que emagrecer ficou muito mais difícil do que antes</li>
-        <li>Quer resultado sem passar fome e sem dieta maluca</li>
+        <li><span>Quer resultado <b>sem passar fome e sem dieta maluca</b></span></li>
         <li>Está pronta pra parar de tentar sozinha e aprender o caminho certo</li>
       </ul>
       <p style="font-weight:700;color:var(--accent);">Não é mais uma tentativa. É a última.</p>
@@ -1013,6 +1215,7 @@ function renderResult(){
 
     <div class="card light">
       <p style="font-weight:700;margin-bottom:10px;">O que você recebe ao entrar:</p>
+      <p style="font-size:14.5px;">${linhaOferta(vilao, vilao2)}</p>
       <ul class="check-list">
         <li>Sugestões de cardápio e cronograma de jejum adequados pra sua rotina</li>
         <li>Rotina que acelera o metabolismo com ingredientes que você já tem em casa</li>
@@ -1020,14 +1223,14 @@ function renderResult(){
         <li>4 aulas ao vivo com o Dr. Pedro Paulo Nabuco</li>
         <li>Tarefas práticas desde o primeiro dia, pra você já começar a ver resultado</li>
       </ul>
-      <p>Por <b>R$29</b>, você entra pra um desafio diferente de tudo o que você já tentou.</p>
-      <a class="btn" href="#oferta" style="text-decoration:none;margin-top:6px;">QUERO PARTICIPAR</a>
+      <a class="btn" href="#oferta" style="text-decoration:none;margin-top:6px;">QUERO PARTICIPAR POR R$29</a>
+      ${microBtn}
     </div>
 
     <div class="card-villain">
       <div class="doctor-mini">
         <img src="foto-dr-pedro.webp" alt="Dr. Pedro Paulo Nabuco" width="56" height="56" loading="lazy" decoding="async" style="width:56px;height:56px;border-radius:50%;flex:none;object-fit:cover;object-position:center;padding:0;border:none;display:block;">
-        <p style="margin:0;">Um desafio com o Dr. Pedro Paulo Nabuco, médico especialista em emagrecimento na menopausa.</p>
+        <p style="margin:0;"><b>Dr. Pedro Paulo Nabuco</b><br>23 anos de atuação em emagrecimento feminino. Já ajudou <b>centenas de mulheres</b> a emagrecerem na menopausa sem dieta restritiva.</p>
       </div>
       <div class="info-chip-row">
         <span class="info-chip">📅 3 a 6 de agosto</span>
@@ -1038,37 +1241,41 @@ function renderResult(){
       <p class="muted" style="font-size:13px;margin:6px 0 14px;">As aulas ficam gravadas durante todo o desafio, caso você não possa assistir ao vivo.</p>
     </div>
 
+    <div class="urgency-strip">
+      <div>
+        <span class="urg-label">⏳ As inscrições fecham em:</span>
+        <p id="contador-vagas" style="font-weight:800;font-size:16px;color:#B8860B;margin:4px 0;"></p>
+        <p>Depois desse prazo, a turma de agosto fecha e você só entra na próxima.</p>
+      </div>
+    </div>
+
     <div class="price-card" id="oferta">
       <span class="promise-badge">🔥 Perca até 5kg durante o desafio</span>
       <div class="price-old">R$ 147</div>
       <div class="price-new">R$ 29</div>
       <div class="price-tag">pagamento único</div>
       <a class="btn" href="https://pay.hotmart.com/N106363772B?off=0txvl7md&checkoutMode=10&src=quiz" onclick="dispararEventoMeta('InitiateCheckout')" style="text-decoration:none;">QUERO EMAGRECER NA MENOPAUSA</a>
-      <p class="guarantee">🛡️ Garantia incondicional de 7 dias: se em até 7 dias você sentir que o desafio não é pra você, devolvemos 100% do seu investimento — sem perguntas, sem burocracia.</p>
+      ${microBtn}
+      <p class="guarantee">🛡️ Garantia incondicional de 7 dias: se em até 7 dias você sentir que o desafio não é pra você, devolvemos 100% do seu investimento, sem perguntas e sem burocracia.</p>
     </div>
 
-    <div class="urgency-strip">
-      <div>
-        <span class="urg-label">⏳ Turma fecha em breve</span>
-        <p>As vagas do Desafio Seca Menopausa são limitadas e podem se encerrar a qualquer momento.</p>
-      </div>
-    </div>
-
-    <h3 style="font-size:16px;text-align:center;margin-bottom:6px;">Mais de 500 mulheres já participaram do Desafio Seca Menopausa</h3>
+    <h3 style="font-size:16px;text-align:center;margin-bottom:6px;">Centenas de mulheres já passaram pelo Desafio Seca Menopausa</h3>
     <p class="muted" style="text-align:center;font-size:13px;margin-bottom:16px;">Veja o que elas dizem:</p>
-    <div class="testi-print"><img src="depoimento-print-01.webp" alt="Depoimento" width="1169" height="372" loading="lazy" decoding="async"></div>
+    <div class="testi-print"><img src="depoimento-print-07.webp" alt="Comentários de participantes do desafio" width="1170" height="525" loading="lazy" decoding="async"></div>
     <div class="testi-print"><img src="depoimento-print-02.webp" alt="Depoimento" width="1170" height="451" loading="lazy" decoding="async"></div>
     <div class="testi-print"><img src="depoimento-print-03.webp" alt="Depoimento" width="1170" height="393" loading="lazy" decoding="async"></div>
     <div class="testi-print"><img src="depoimento-print-04.webp" alt="Depoimento" width="898" height="250" loading="lazy" decoding="async"></div>
     <div class="testi-print"><img src="depoimento-print-05.webp" alt="Depoimento" width="1170" height="299" loading="lazy" decoding="async"></div>
     <div class="testi-print"><img src="depoimento-print-06.webp" alt="Depoimento" width="1170" height="412" loading="lazy" decoding="async"></div>
 
-    <a class="btn" href="#oferta" style="text-decoration:none;margin:10px 0 24px;">QUERO PARTICIPAR</a>
+    <a class="btn" href="#oferta" style="text-decoration:none;margin:10px 0 0;">QUERO PARTICIPAR POR R$29</a>
+    ${microBtn}
 
-    <footer class="disclaimer">Desafio Seca Menopausa · Dr. Pedro Paulo Nabuco</footer>
+    <footer class="disclaimer" style="margin-top:24px;">Desafio Seca Menopausa · Dr. Pedro Paulo Nabuco</footer>
   `;
   document.getElementById('result-body').innerHTML = html;
   showScreen('screen-result');
+  iniciarContador();
   // marca quem chegou até o resultado final (útil pra saber quem completou o quiz)
   fbq('track', 'ViewContent', {content_name:'resultado_visto', vilao, sinal});
 }
