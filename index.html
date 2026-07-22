@@ -767,7 +767,9 @@ function startQuiz(){
 document.querySelector('#screen-landing .btn').setAttribute('onclick','startQuiz()');
 
 // se a pessoa já tem um diagnóstico salvo neste navegador, pula direto pro resultado
-(function checarDiagnosticoSalvo(){
+// IMPORTANTE: a chamada desta função fica no FIM do script, depois de todas as
+// declarações — chamar aqui em cima quebrava a renderização do resultado salvo
+function checarDiagnosticoSalvo(){
   try{
     const salvo = localStorage.getItem('diagnosticoSecaMenopausa');
     if(!salvo) return;
@@ -776,7 +778,7 @@ document.querySelector('#screen-landing .btn').setAttribute('onclick','startQuiz
     Object.assign(state, dadosSalvos);
     renderResult();
   }catch(e){ /* dado corrompido ou localStorage indisponível — segue fluxo normal do quiz */ }
-})();
+}
 
 function renderStep(){
   const step = steps[currentIndex];
@@ -821,6 +823,12 @@ function renderStep(){
     html += `<button class="btn" id="next-btn" disabled onclick="nextStep()">CONTINUAR</button>`;
   }
   body.innerHTML = html;
+
+  // se a pessoa voltou pra uma pergunta já respondida, mostra a resposta que ela tinha marcado
+  const previa = state.respostasIdx ? state.respostasIdx[step.id] : undefined;
+  if((step.tipo === 'opcoes' || step.tipo === 'imagem') && typeof previa === 'number' && step.opcoes[previa]){
+    selectOption(previa);
+  }
 }
 
 function answerText(){
@@ -854,6 +862,13 @@ function selectOption(i){
 function nextStep(){
   const step = steps[currentIndex];
   const opt = step.opcoes[state._selected];
+  // se a pessoa voltou e respondeu de novo, tira a pontuação da resposta anterior
+  // (antes disso, responder 2x a mesma pergunta somava ponto duplicado e podia mudar o diagnóstico)
+  const anterior = state.opcoesSelecionadas[step.id];
+  if(anterior && anterior.hormonio){
+    state.scores[anterior.hormonio] = Math.max(0, (state.scores[anterior.hormonio]||0) - 1);
+    if(anterior.intensidade) state.intensidadePorHormonio[anterior.hormonio] = Math.max(0, (state.intensidadePorHormonio[anterior.hormonio]||0) - 1);
+  }
   state.respostas[step.id] = opt.label;
   state.opcoesSelecionadas[step.id] = opt;
   if(!state.respostasIdx) state.respostasIdx = {};
@@ -1279,6 +1294,9 @@ function renderResult(){
   // marca quem chegou até o resultado final (útil pra saber quem completou o quiz)
   fbq('track', 'ViewContent', {content_name:'resultado_visto', vilao, sinal});
 }
+
+// roda a checagem do diagnóstico salvo só agora, com todo o script já declarado
+checarDiagnosticoSalvo();
 </script>
 
 <!-- Meta Conversions API (server-side) — PageView com dedup via eventID -->
