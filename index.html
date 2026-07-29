@@ -1389,20 +1389,26 @@ function initVSL(){
     player.pause().catch(()=>{});
   }
 
-  // só começa a observar o scroll depois que o player confirmar que está pronto —
-  // sem isso, a primeira tentativa de tocar podia falhar silenciosamente e exigir play manual
-  player.ready().then(()=>{
+  function ativarObserver(){
+    // limite baixo (25%) porque o vídeo é vertical/alto — em celular ele pode nunca
+    // ficar 50% visível de uma vez só, mesmo rolando até ele
     const observer = new IntersectionObserver((entries)=>{
       entries.forEach(entry=>{
-        if(entry.isIntersecting && entry.intersectionRatio >= 0.5){
+        if(entry.isIntersecting && entry.intersectionRatio >= 0.25){
           tocar();
-        } else {
+        } else if(!entry.isIntersecting){
           pausar();
         }
       });
-    }, { threshold: 0.5 });
+    }, { threshold: [0, 0.25, 0.5] });
     observer.observe(wrap);
-  }).catch(()=>{});
+  }
+
+  // só começa a observar o scroll depois que o player confirmar que está pronto —
+  // sem isso, a primeira tentativa de tocar podia falhar silenciosamente e exigir play manual.
+  // se o player demorar mais de 3s pra responder, ativa mesmo assim (não trava a experiência)
+  const timeoutReady = new Promise(resolve => setTimeout(resolve, 3000));
+  Promise.race([player.ready(), timeoutReady]).then(ativarObserver).catch(ativarObserver);
 
   if(btn){
     btn.addEventListener('click', ()=>{
