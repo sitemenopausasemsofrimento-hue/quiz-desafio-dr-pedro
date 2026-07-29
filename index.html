@@ -346,7 +346,7 @@
   #screen-result .result-title.signal-text-amarelo{ color:#B8860B; }
   #screen-result .result-title.signal-text-vermelho{ color:#DC2626; }
   #screen-result .check-list li{ color:#201410; }
-  #screen-result .info-chip{ background:#F5F0E8; color:#201410; }
+  #screen-result .info-chip{ background:#FFFFFF; color:#201410; border:1px solid rgba(26,15,10,0.1); }
   #screen-result .testi{ background:#F5F0E8; }
   #screen-result .testi.placeholder-testi{ background:#FBF8F5; color:#9C8674; }
   #screen-result footer.disclaimer{ color:#B8A594; }
@@ -1298,16 +1298,7 @@ function renderResult(){
     <div class="testi-print"><img src="depoimento-print-01.webp" alt="Depoimento" width="1169" height="372" loading="lazy" decoding="async"></div>
 
     <div class="card light" style="margin-top:20px;">
-      <p style="font-weight:700;margin-bottom:10px;">O desafio é pra você que:</p>
-      <ul class="check-list">
-        <li>Já tentou de tudo: protocolo de internet, nutricionista, dieta por conta própria, e sempre voltou pra estaca zero</li>
-        <li><span>Quer resultado <b>sem passar fome e sem dieta maluca</b></span></li>
-        <li>Está pronta pra parar de tentar sozinha e aprender o caminho certo</li>
-      </ul>
-      <p style="font-weight:700;color:var(--accent);">Não é mais uma tentativa. É a última.</p>
-    </div>
-
-    <div class="card light">
+      <p style="font-weight:700;color:var(--accent);text-align:center;margin-bottom:14px;">Não é mais uma tentativa. É a última.</p>
       <p style="font-weight:700;margin-bottom:10px;">O que você recebe ao entrar:</p>
       <p style="font-size:14.5px;">${linhaOferta(vilao, vilao2)}</p>
       <ul class="check-list">
@@ -1317,11 +1308,11 @@ function renderResult(){
         <li>4 aulas ao vivo com o Dr. Pedro Paulo Nabuco</li>
         <li>Tarefas práticas desde o primeiro dia, pra você já começar a ver resultado</li>
       </ul>
-      <a class="btn" href="#oferta" style="text-decoration:none;margin-top:6px;">QUERO PARTICIPAR POR R$29</a>
+      <a class="btn" href="#oferta" style="text-decoration:none;margin-top:6px;">QUERO EMAGRECER NA MENOPAUSA</a>
       ${microBtn}
     </div>
 
-    <div class="card-villain">
+    <div class="card light">
       <div class="doctor-mini">
         <img src="foto-dr-pedro.webp" alt="Dr. Pedro Paulo Nabuco" width="56" height="56" loading="lazy" decoding="async" style="width:56px;height:56px;border-radius:50%;flex:none;object-fit:cover;object-position:center;padding:0;border:none;display:block;">
         <p style="margin:0;"><b>Dr. Pedro Paulo Nabuco</b><br>23 anos de atuação em emagrecimento feminino. Já ajudou <b>centenas de mulheres</b> a emagrecerem na menopausa sem dieta restritiva.</p>
@@ -1362,7 +1353,7 @@ function renderResult(){
     <div class="testi-print"><img src="depoimento-print-05.webp" alt="Depoimento" width="1170" height="299" loading="lazy" decoding="async"></div>
     <div class="testi-print"><img src="depoimento-print-06.webp" alt="Depoimento" width="1170" height="412" loading="lazy" decoding="async"></div>
 
-    <a class="btn" href="#oferta" style="text-decoration:none;margin:10px 0 0;">QUERO PARTICIPAR POR R$29</a>
+    <a class="btn" href="#oferta" style="text-decoration:none;margin:10px 0 0;">QUERO EMAGRECER NA MENOPAUSA</a>
     ${microBtn}
 
     <footer class="disclaimer" style="margin-top:24px;">Desafio Seca Menopausa · Dr. Pedro Paulo Nabuco</footer>
@@ -1383,8 +1374,11 @@ function initVSL(){
   const iframe = wrap.querySelector('iframe');
   const btn = document.getElementById('vsl-unmute-btn');
   const player = new Vimeo.Player(iframe);
+  let emReproducao = false; // trava pra não mandar tocar de novo enquanto já está tocando
 
   function tocar(){
+    if(emReproducao) return;
+    emReproducao = true;
     // tenta tocar com som primeiro (a pessoa já interagiu bastante com o quiz até aqui)
     player.setMuted(false).then(()=>{
       return player.play();
@@ -1398,16 +1392,26 @@ function initVSL(){
     });
   }
 
-  const observer = new IntersectionObserver((entries)=>{
-    entries.forEach(entry=>{
-      if(entry.isIntersecting && entry.intersectionRatio >= 0.5){
-        tocar();
-      } else {
-        player.pause().catch(()=>{});
-      }
-    });
-  }, { threshold: 0.5 });
-  observer.observe(wrap);
+  function pausar(){
+    if(!emReproducao) return;
+    emReproducao = false;
+    player.pause().catch(()=>{});
+  }
+
+  // só começa a observar o scroll depois que o player confirmar que está pronto —
+  // sem isso, a primeira tentativa de tocar podia falhar silenciosamente e exigir play manual
+  player.ready().then(()=>{
+    const observer = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting && entry.intersectionRatio >= 0.5){
+          tocar();
+        } else {
+          pausar();
+        }
+      });
+    }, { threshold: 0.5 });
+    observer.observe(wrap);
+  }).catch(()=>{});
 
   if(btn){
     btn.addEventListener('click', ()=>{
