@@ -892,21 +892,20 @@ function renderStep(){
       <div class="option" data-i="${i}" onclick="selectOption(${i})">
         <span>${o.label}</span><span class="radio"></span>
       </div>`).join('') + `</div>`;
-    html += `<button class="btn" id="next-btn" disabled onclick="nextStep()">CONTINUAR</button>`;
   } else if(step.tipo === 'imagem'){
     html += `<div class="img-grid">` + step.opcoes.map((o,i)=>`
       <div class="img-option" data-i="${i}" onclick="selectOption(${i})">
         <div class="thumb">${o.emoji}</div>
         <div class="cap">${o.label}</div>
       </div>`).join('') + `</div>`;
-    html += `<button class="btn" id="next-btn" disabled onclick="nextStep()">CONTINUAR</button>`;
   }
   body.innerHTML = html;
 
   // se a pessoa voltou pra uma pergunta já respondida, mostra a resposta que ela tinha marcado
+  // (sem avançar sozinho de novo — é só pra reexibir a seleção)
   const previa = state.respostasIdx ? state.respostasIdx[step.id] : undefined;
   if((step.tipo === 'opcoes' || step.tipo === 'imagem') && typeof previa === 'number' && step.opcoes[previa]){
-    selectOption(previa);
+    selectOption(previa, false);
   }
 }
 
@@ -929,13 +928,17 @@ function answerNumero(){
   advance();
 }
 
-function selectOption(i){
+function selectOption(i, avancar){
+  if(avancar === undefined) avancar = true; // padrão: avança sozinho ao tocar na opção
   const step = steps[currentIndex];
   document.querySelectorAll('.option, .img-option').forEach(el=>el.classList.remove('selected'));
   const els = document.querySelectorAll(step.tipo==='imagem' ? '.img-option' : '.option');
   els[i].classList.add('selected');
-  document.getElementById('next-btn').disabled = false;
   state._selected = i;
+  if(avancar){
+    // pequena pausa só pra pessoa ver a opção marcada antes de mudar de tela
+    setTimeout(nextStep, 300);
+  }
 }
 
 function nextStep(){
