@@ -1361,7 +1361,13 @@ function renderResult(){
 // e mostra um botão pra pessoa ativar o som quando quiser.
 function initVSL(){
   const wrap = document.getElementById('vsl-video');
-  if(!wrap || typeof Vimeo === 'undefined') return;
+  if(!wrap) return;
+  if(typeof Vimeo === 'undefined'){
+    // o SDK do Vimeo (player.js) ainda não terminou de carregar — tenta de novo em breve,
+    // em vez de desistir (isso podia fazer o autoplay nunca ativar em conexões mais lentas)
+    setTimeout(initVSL, 200);
+    return;
+  }
   const iframe = wrap.querySelector('iframe');
   const btn = document.getElementById('vsl-unmute-btn');
   const player = new Vimeo.Player(iframe);
