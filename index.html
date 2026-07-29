@@ -224,16 +224,18 @@
   .vsl-frame iframe{ position:absolute; top:0; left:0; width:100%; height:100%; border:none; }
   .vsl-unmute-overlay{
     position:absolute; inset:0; width:100%; height:100%;
-    display:flex; align-items:flex-end; justify-content:center; padding-bottom:16px;
+    display:flex; align-items:center; justify-content:center;
     background:rgba(0,0,0,0.15); border:none; cursor:pointer; z-index:5;
     transition:opacity .2s ease;
   }
   .vsl-unmute-overlay.hidden{ opacity:0; pointer-events:none; }
   .vsl-unmute-pill{
-    background:rgba(0,0,0,0.7); color:#fff; border:1px solid rgba(255,255,255,0.4);
-    border-radius:999px; padding:10px 18px; font-size:13px; font-weight:700;
-    font-family:var(--font-body);
+    background:linear-gradient(90deg, var(--accent), var(--accent-2)); color:#fff;
+    border:none; box-shadow:0 8px 24px rgba(232,98,31,0.5);
+    border-radius:999px; padding:14px 26px; font-size:15px; font-weight:800;
+    font-family:var(--font-body); animation:pulseSom 1.4s ease-in-out infinite;
   }
+  @keyframes pulseSom{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.06); } }
 
   /* foto pequena do médico dentro do card de datas */
   .doctor-mini{ display:flex; align-items:center; gap:12px; margin:8px 0 16px; }
@@ -1399,21 +1401,16 @@ function initVSL(){
     });
   }
 
-  function pausar(){
-    if(!emReproducao) return;
-    emReproducao = false;
-    player.pause().catch(()=>{});
-  }
-
   function ativarObserver(){
     // limite baixo (25%) porque o vídeo é vertical/alto — em celular ele pode nunca
-    // ficar 50% visível de uma vez só, mesmo rolando até ele
+    // ficar 50% visível de uma vez só, mesmo rolando até ele.
+    // depois que tocar uma vez, o vídeo continua rodando mesmo se a pessoa rolar pra longe —
+    // não pausa mais sozinho.
     const observer = new IntersectionObserver((entries)=>{
       entries.forEach(entry=>{
         if(entry.isIntersecting && entry.intersectionRatio >= 0.25){
           tocar();
-        } else if(!entry.isIntersecting){
-          pausar();
+          if(emReproducao) observer.unobserve(wrap);
         }
       });
     }, { threshold: [0, 0.25, 0.5] });
