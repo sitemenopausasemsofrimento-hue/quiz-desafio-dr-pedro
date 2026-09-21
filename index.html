@@ -41,16 +41,18 @@
     min-height:100vh;
     display:flex;
     justify-content:center;
-    padding-top:var(--countdown-h);
   }
+  body.has-countdown{ padding-top:var(--countdown-h); }
   .countdown-bar{
+    display:none;
     position:fixed; top:0; left:0; right:0; z-index:1000;
     height:var(--countdown-h);
-    display:flex; align-items:center; justify-content:center;
+    align-items:center; justify-content:center;
     background:linear-gradient(90deg, var(--accent), var(--accent-2));
     color:#fff; text-align:center; font-weight:800; font-size:13px;
     letter-spacing:.02em; padding:0 12px;
   }
+  .countdown-bar.visible{ display:flex; }
   #app{
     width:100%;
     max-width:var(--container);
@@ -432,9 +434,9 @@ function dispararEventoMeta(eventName, extraParams){
 </div>
 <script>
 (function(){
-  // desafio começa 03/08 às 07h (horário de Brasília)
-  const dataDesafio = new Date('2026-08-03T07:00:00-03:00');
-  const dataFimDesafio = new Date('2026-08-06T23:59:59-03:00');
+  // desafio começa 13/10 às 07h (horário de Brasília)
+  const dataDesafio = new Date('2026-10-13T07:00:00-03:00');
+  const dataFimDesafio = new Date('2026-10-16T23:59:59-03:00');
 
   function atualizarContagem(){
     const el = document.getElementById('countdown-text');
@@ -447,7 +449,7 @@ function dispararEventoMeta(eventName, extraParams){
     if(agora > dataFimDesafio){
       texto = 'O Desafio Seca Menopausa já aconteceu — fique de olho na próxima turma!';
     } else if(agora >= dataDesafio){
-      texto = '🔥 O Desafio Seca Menopausa começou! As aulas continuam até dia 6/08.';
+      texto = '🔥 O Desafio Seca Menopausa começou! As aulas continuam até dia 16/10.';
     } else if(diffDias <= 0){
       texto = '🔥 O Desafio Seca Menopausa começa hoje!';
     } else if(diffDias === 1){
@@ -805,6 +807,15 @@ function showPillObjecao(){
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
+  // a barra de contagem fixa no topo só aparece na página final (resultado)
+  const barra = document.getElementById('countdown-bar');
+  if(id === 'screen-result'){
+    if(barra) barra.classList.add('visible');
+    document.body.classList.add('has-countdown');
+  } else {
+    if(barra) barra.classList.remove('visible');
+    document.body.classList.remove('has-countdown');
+  }
   window.scrollTo({top:0, behavior:'smooth'});
   // rastreia em qual tela a pessoa está, pra você ver funil de abandono no Gerenciador de Eventos
   fbq('trackCustom', 'ScreenView', {screen_id: id});
@@ -1191,11 +1202,11 @@ let contadorInterval = null;
 function iniciarContador(){
   const el = document.getElementById('contador-vagas');
   if(!el) return;
-  const alvo = new Date('2026-08-03T00:00:00-03:00').getTime();
+  const alvo = new Date('2026-10-13T00:00:00-03:00').getTime();
   function atualizar(){
     const diff = alvo - Date.now();
     if(diff <= 0){
-      el.textContent = 'Últimas vagas da turma de agosto';
+      el.textContent = 'Últimas vagas da turma de outubro';
       if(contadorInterval) clearInterval(contadorInterval);
       return;
     }
@@ -1323,7 +1334,7 @@ function renderResult(){
         <p style="margin:0;"><b>Dr. Pedro Paulo Nabuco</b><br>23 anos de atuação em emagrecimento feminino. Já ajudou <b>centenas de mulheres</b> a emagrecerem na menopausa sem dieta restritiva.</p>
       </div>
       <div class="info-chip-row">
-        <span class="info-chip">📅 3 a 6 de agosto · 🎥 4 aulas ao vivo</span>
+        <span class="info-chip">📅 13 a 16 de outubro · 🎥 4 aulas ao vivo</span>
         <span class="info-chip">🕐 07h da manhã · 💬 Tudo no seu WhatsApp</span>
       </div>
       <p class="muted" style="font-size:13px;margin:6px 0 14px;">As aulas ficam gravadas durante todo o desafio, caso você não possa assistir ao vivo.</p>
@@ -1333,16 +1344,16 @@ function renderResult(){
       <div>
         <span class="urg-label">⏳ As inscrições fecham em:</span>
         <p id="contador-vagas" style="font-weight:800;font-size:16px;color:#DC2626;margin:4px 0;"></p>
-        <p>Depois desse prazo, a turma de agosto fecha e você só entra na próxima.</p>
+        <p>Depois desse prazo, a turma de outubro fecha e você só entra na próxima.</p>
       </div>
     </div>
 
     <div class="price-card" id="oferta">
       <span class="promise-badge">🔥 Perca até 5kg durante o desafio</span>
       <div class="price-old">R$ 147</div>
-      <div class="price-new">R$ 29</div>
+      <div class="price-new">R$ 47</div>
       <div class="price-tag">pagamento único</div>
-      <a class="btn" href="https://pay.hotmart.com/N106363772B?off=0txvl7md&checkoutMode=10&src=quiz" onclick="dispararEventoMeta('InitiateCheckout')" style="text-decoration:none;">QUERO EMAGRECER NA MENOPAUSA</a>
+      <a class="btn" href="https://pay.hotmart.com/F107698915Y?off=y8f4avwl&checkoutMode=10&src=quiz" onclick="dispararEventoMeta('InitiateCheckout')" style="text-decoration:none;">QUERO EMAGRECER NA MENOPAUSA</a>
       ${microBtn}
       <p class="guarantee">🛡️ Garantia incondicional de 7 dias: se em até 7 dias você sentir que o desafio não é pra você, devolvemos 100% do seu investimento, sem perguntas e sem burocracia.</p>
     </div>
