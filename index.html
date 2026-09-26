@@ -644,8 +644,10 @@ const steps = [
     {label:'Sinto fome de novo pouco tempo depois de ter comido', hormonio:'Insulina', intensidade:true},
     {label:'Preciso beliscar entre as refeições', hormonio:'Insulina', intensidade:true},
   ]},
-  {id:'nome', tipo:'texto', pergunta:'Como você se chama?', placeholder:'Digite seu nome'},
-  {id:'idade', tipo:'opcoes', pergunta:'Quantos anos você tem?', opcoes:[
+  {id:'nome', tipo:'texto', pergunta:'Pra personalizar o seu diagnóstico: como você se chama?',
+   subtitulo:'Seu resultado é montado pro seu caso, e queremos falar com você pelo nome.', placeholder:'Digite seu nome'},
+  {id:'idade', tipo:'opcoes', pergunta:'E em que faixa de idade você está?',
+   subtitulo:'A fase hormonal muda o que funciona pro seu corpo. Isso ajusta o seu diagnóstico.', opcoes:[
     {label:'40–45', idade:42},
     {label:'46–50', idade:48},
     {label:'51–55', idade:53},
