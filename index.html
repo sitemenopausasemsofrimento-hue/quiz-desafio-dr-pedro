@@ -1164,23 +1164,21 @@ function linhaOferta(vilao, vilao2){
   return OFERTA_LINHA[vilao];
 }
 
-// contador regressivo real até a abertura da turma (3 de agosto, horário de Brasília)
+// bloco de urgência: o texto do Pré-Desafio fica fixo no HTML. Este script só troca
+// pra "últimas vagas" depois que a turma começa (13/10, horário de Brasília).
 let contadorInterval = null;
 function iniciarContador(){
   const el = document.getElementById('contador-vagas');
+  const sub = document.getElementById('contador-sub');
+  const titulo = document.getElementById('contador-titulo');
   if(!el) return;
   const alvo = new Date('2026-10-13T00:00:00-03:00').getTime();
   function atualizar(){
-    const diff = alvo - Date.now();
-    if(diff <= 0){
-      el.textContent = 'Últimas vagas da turma de outubro';
-      if(contadorInterval) clearInterval(contadorInterval);
-      return;
-    }
-    const d = Math.floor(diff / 86400000);
-    const h = Math.floor((diff % 86400000) / 3600000);
-    const m = Math.floor((diff % 3600000) / 60000);
-    el.textContent = `${d} dias : ${String(h).padStart(2,'0')} horas : ${String(m).padStart(2,'0')} min`;
+    if(Date.now() < alvo) return; // antes da turma: mantém o texto fixo do HTML
+    if(titulo) titulo.textContent = '⏳ A turma de outubro já começou';
+    el.textContent = 'Últimas vagas: entre agora pra não perder as aulas ao vivo';
+    if(sub) sub.textContent = 'Depois dessa turma, só na próxima.';
+    if(contadorInterval) clearInterval(contadorInterval);
   }
   if(contadorInterval) clearInterval(contadorInterval);
   atualizar();
@@ -1274,9 +1272,9 @@ function renderResult(){
 
     <div class="urgency-strip">
       <div>
-        <span class="urg-label">⏳ As inscrições fecham em:</span>
-        <p id="contador-vagas" style="font-weight:800;font-size:16px;color:#DC2626;margin:4px 0;"></p>
-        <p>Depois desse prazo, a turma de outubro fecha e você só entra na próxima. Quanto antes você entrar, mais dias de Pré-Desafio no WhatsApp você aproveita antes da turma começar.</p>
+        <span class="urg-label" id="contador-titulo">⏳ Seu Pré-Desafio já começa hoje</span>
+        <p id="contador-vagas" style="font-weight:800;font-size:16px;color:#DC2626;margin:4px 0;">Entrou, recebeu: as primeiras tarefas chegam no seu WhatsApp agora</p>
+        <p id="contador-sub">Você chega na turma de 13/10 já emagrecendo. Quem espera, começa do zero.</p>
       </div>
     </div>
 
