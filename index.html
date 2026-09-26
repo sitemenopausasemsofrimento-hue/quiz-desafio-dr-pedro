@@ -5,14 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Quiz — Desafio Seca Menopausa</title>
 <meta name="description" content="Descubra em poucos minutos qual hormônio está travando seu emagrecimento na menopausa e receba seu diagnóstico personalizado.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<!-- fontes carregadas sem bloquear a renderização da página -->
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@400;500;700&display=swap">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@400;500;700&display=swap" media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@400;500;700&display=swap"></noscript>
+<!-- fontes hospedadas no próprio site (sem conexão externa ao Google Fonts): arquivos variáveis, um por família cobre todos os pesos -->
+<link rel="preload" as="font" type="font/woff2" href="playfair-display.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="dm-sans.woff2" crossorigin>
 <script src="https://player.vimeo.com/api/player.js" defer></script>
 <style>
+  @font-face{
+    font-family:'Playfair Display';
+    font-style:normal;
+    font-weight:400 900;
+    font-display:swap;
+    src:url('playfair-display.woff2') format('woff2');
+  }
+  @font-face{
+    font-family:'DM Sans';
+    font-style:normal;
+    font-weight:100 1000;
+    font-display:swap;
+    src:url('dm-sans.woff2') format('woff2');
+  }
   :root{
     --bg-0:#270E0D;
     --bg-1:#3A1615;
@@ -42,17 +53,6 @@
     display:flex;
     justify-content:center;
   }
-  body.has-countdown{ padding-top:var(--countdown-h); }
-  .countdown-bar{
-    display:none;
-    position:fixed; top:0; left:0; right:0; z-index:1000;
-    height:var(--countdown-h);
-    align-items:center; justify-content:center;
-    background:linear-gradient(90deg, var(--accent), var(--accent-2));
-    color:#fff; text-align:center; font-weight:800; font-size:13px;
-    letter-spacing:.02em; padding:0 12px;
-  }
-  .countdown-bar.visible{ display:flex; }
   #app{
     width:100%;
     max-width:var(--container);
@@ -429,42 +429,6 @@ function dispararEventoMeta(eventName, extraParams){
 </head>
 <body>
 
-<div class="countdown-bar" id="countdown-bar">
-  <span id="countdown-text">Faltam X dias para o Desafio Seca Menopausa 🔥</span>
-</div>
-<script>
-(function(){
-  // desafio começa 13/10 às 07h (horário de Brasília)
-  const dataDesafio = new Date('2026-10-13T07:00:00-03:00');
-  const dataFimDesafio = new Date('2026-10-16T23:59:59-03:00');
-
-  function atualizarContagem(){
-    const el = document.getElementById('countdown-text');
-    if(!el) return;
-    const agora = new Date();
-    const diffMs = dataDesafio - agora;
-    const diffDias = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-
-    let texto;
-    if(agora > dataFimDesafio){
-      texto = 'O Desafio Seca Menopausa já aconteceu — fique de olho na próxima turma!';
-    } else if(agora >= dataDesafio){
-      texto = '🔥 O Desafio Seca Menopausa começou! As aulas continuam até dia 16/10.';
-    } else if(diffDias <= 0){
-      texto = '🔥 O Desafio Seca Menopausa começa hoje!';
-    } else if(diffDias === 1){
-      texto = '🔥 Falta 1 dia para o Desafio Seca Menopausa!';
-    } else {
-      texto = `🔥 Faltam ${diffDias} dias para o Desafio Seca Menopausa!`;
-    }
-    el.textContent = texto;
-  }
-
-  atualizarContagem();
-  setInterval(atualizarContagem, 60 * 60 * 1000); // atualiza a cada hora
-})();
-</script>
-
 <!-- UTM Pass Corrigido e Blindado -->
 <script>
   (function () {
@@ -534,7 +498,7 @@ function dispararEventoMeta(eventName, extraParams){
       <h1>Descubra qual hormônio da menopausa não te deixa emagrecer</h1>
       <p class="sub">Teste rápido de 2 minutos que revela o que está sabotando seu peso nessa fase, e o que fazer pra destravar.</p>
       <button class="btn" onclick="startQuiz()">QUERO DESCOBRIR</button>
-      <p class="micro">Leva menos de 2 minutos <span class="dot">•</span> 100% Confidencial</p>
+      <p class="micro">11 perguntas rápidas <span class="dot">•</span> Resultado na hora</p>
     </div>
   </section>
 
@@ -561,8 +525,8 @@ function dispararEventoMeta(eventName, extraParams){
       <h2><span class="name-highlight" id="reassure-name">Nome</span>, pode ficar tranquila: <b>o seu caso tem solução.</b></h2>
 
       <div class="reassure-story">
-        <p class="story-caption" style="padding:16px 18px 0;">Assim como centenas de mulheres, você também consegue emagrecer na menopausa. A <b>Cristina</b> eliminou <span class="highlight">5kg</span> aplicando as estratégias do Desafio Seca Menopausa.</p>
-        <img src="print-depoimento-pausa-02.webp" alt="Depoimento de aluna do Desafio Seca Menopausa" width="750" height="550" loading="lazy" decoding="async" style="width:100%;height:auto;display:block;margin-top:12px;">
+        <p class="story-caption" style="padding:16px 18px 0;">Assim como centenas de mulheres, você também consegue emagrecer na menopausa. A <b>Dina</b> eliminou <span class="highlight">4kg</span>, perdeu <span class="highlight">10cm de cintura</span> e voltou a usar roupas que não serviam há mais de 2 anos, aplicando as estratégias do Desafio Seca Menopausa.</p>
+        <img src="depoimento-print-08.webp" alt="Depoimento de aluna do Desafio Seca Menopausa" width="350" height="158" loading="lazy" decoding="async" style="width:100%;height:auto;display:block;margin-top:12px;">
       </div>
 
       <button class="btn" onclick="goTo('energia')">Continuar com meu diagnóstico</button>
@@ -661,8 +625,6 @@ function gerarObservacaoPersonalizada(vilao, vilao2){
    OBS: a pergunta "pele" (escurecimento) virou informativa e não soma mais pontuação de Insulina,
    pra equilibrar o número de perguntas que contam ponto por hormônio (2 dedicadas + a de imagem, pra todos). */
 const steps = [
-  {id:'nome', tipo:'texto', pergunta:'Como você se chama?', placeholder:'Digite seu nome'},
-  {id:'idade', tipo:'numero', pergunta:'Quantos anos você tem?', placeholder:'Ex: 47'},
   {id:'acumulo', tipo:'imagem', pergunta:'Onde você mais acumula gordura hoje?',
    subtitulo:'A forma como seu corpo guarda gordura tem relação direta com seus hormônios.', opcoes:[
     {label:'Só na barriga, do nada', hormonio:'Cortisol', emoji:'🔥'},
@@ -681,6 +643,13 @@ const steps = [
     {label:'Às vezes sinto fome um pouco antes da hora'},
     {label:'Sinto fome de novo pouco tempo depois de ter comido', hormonio:'Insulina', intensidade:true},
     {label:'Preciso beliscar entre as refeições', hormonio:'Insulina', intensidade:true},
+  ]},
+  {id:'nome', tipo:'texto', pergunta:'Como você se chama?', placeholder:'Digite seu nome'},
+  {id:'idade', tipo:'opcoes', pergunta:'Quantos anos você tem?', opcoes:[
+    {label:'40–45', idade:42},
+    {label:'46–50', idade:48},
+    {label:'51–55', idade:53},
+    {label:'56+', idade:58},
   ]},
   {id:'curiosidade_jejum', tipo:'opcoes', pergunta:'Você já fez jejum alguma vez?', opcoes:[
     {label:'Já fiz jejum intermitente, mas não emagreci como esperava'},
@@ -739,7 +708,7 @@ const PILL_CONFIG = {
     zero:'Insulina parece regulada por enquanto. Seguindo a avaliação dos outros hormônios.',
     parcial:'⚠️ Pode ser sinal de <b>RESISTÊNCIA À INSULINA</b>. Vamos confirmar com os próximos hormônios e te mostrar o que fazer com isso.',
     max:'⚠️ Vontade de doce + fome fora de hora = sinal de <b>RESISTÊNCIA À INSULINA</b> travando sua barriga. A boa notícia: existe um método específico pra isso, e você já vai entender qual é.',
-    nextAction: ()=>advanceComBanner('curiosidade_jejum'),
+    nextAction: ()=>advanceComBanner('nome'),
   },
   Cortisol: {
     ids:['estresse','sono'],
@@ -807,15 +776,6 @@ function showPillObjecao(){
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  // a barra de contagem fixa no topo só aparece na página final (resultado)
-  const barra = document.getElementById('countdown-bar');
-  if(id === 'screen-result'){
-    if(barra) barra.classList.add('visible');
-    document.body.classList.add('has-countdown');
-  } else {
-    if(barra) barra.classList.remove('visible');
-    document.body.classList.remove('has-countdown');
-  }
   window.scrollTo({top:0, behavior:'smooth'});
   // rastreia em qual tela a pessoa está, pra você ver funil de abandono no Gerenciador de Eventos
   fbq('trackCustom', 'ScreenView', {screen_id: id});
@@ -968,6 +928,10 @@ function nextStep(){
   state.opcoesSelecionadas[step.id] = opt;
   if(!state.respostasIdx) state.respostasIdx = {};
   state.respostasIdx[step.id] = state._selected;
+  if(step.id === 'idade' && typeof opt.idade === 'number'){
+    state.idade = opt.idade;
+    state.idadeFaixa = opt.label;
+  }
   if(opt.hormonio){
     state.scores[opt.hormonio] = (state.scores[opt.hormonio]||0) + 1;
     if(opt.intensidade) state.intensidadePorHormonio[opt.hormonio] = (state.intensidadePorHormonio[opt.hormonio]||0) + 1;
@@ -1138,8 +1102,9 @@ function fraseEspelho(vilao, vilao2){
 function fraseIdade(){
   const idade = parseInt(state.idade, 10);
   if(!idade || idade < 18) return '';
+  const faixa = state.idadeFaixa ? `nos seus <b>${state.idadeFaixa} anos</b>` : `aos <b>${idade} anos</b>`;
   const comparacao = idade >= 45 ? 'não responde mais como aos 35' : 'já não responde como antes';
-  return `<p>Aos <b>${idade} anos</b>, seu corpo ${comparacao}. Por isso <b>o que funcionava antes parou de funcionar</b>.</p>`;
+  return `<p>Assim, ${faixa}, seu corpo ${comparacao}. Por isso <b>o que funcionava antes parou de funcionar</b>.</p>`;
 }
 
 function fraseSegundoHormonio(vilao, vilao2){
@@ -1279,7 +1244,7 @@ function renderResult(){
     significadoHtml = `<p style="margin-top:6px;">${significados[vilao]} ${significados[vilao2]}</p>`;
   }
 
-  const microBtn = `<p class="muted" style="text-align:center;font-size:12.5px;margin:10px 0 0;">Pagamento único · Acesso imediato pelo WhatsApp · Garantia de 7 dias</p>`;
+  const microBtn = `<p class="muted" style="text-align:center;font-size:12.5px;margin:10px 0 0;">Pagamento único · Pix, cartão ou boleto · Garantia de 7 dias</p>`;
 
   const html = `
     <h2 style="text-align:center;font-size:24px;">Olá, <span class="name-highlight">${nome}</span></h2>
@@ -1304,6 +1269,26 @@ function renderResult(){
         <span class="vsl-unmute-pill">🔊 Toque para ativar o som</span>
       </button>
     </div>
+
+    <div class="urgency-strip">
+      <div>
+        <span class="urg-label">⏳ As inscrições fecham em:</span>
+        <p id="contador-vagas" style="font-weight:800;font-size:16px;color:#DC2626;margin:4px 0;"></p>
+        <p>Depois desse prazo, a turma de outubro fecha e você só entra na próxima. Quanto antes você entrar, mais dias de Pré-Desafio no WhatsApp você aproveita antes da turma começar.</p>
+      </div>
+    </div>
+
+    <div class="price-card" id="oferta">
+      <span class="promise-badge">🔥 Perca até 5kg durante o desafio</span>
+      <div class="price-old">R$ 147</div>
+      <div class="price-new">R$ 47</div>
+      <div class="price-tag">pagamento único</div>
+      <p class="muted" style="font-size:13px;margin:0 0 14px;">Assim que você entra, já recebe o <b>Pré-Desafio no WhatsApp</b>: tarefas simples pra começar a perder peso hoje, antes mesmo da turma ao vivo começar.</p>
+      <a class="btn" href="https://pay.hotmart.com/F107698915Y?off=y8f4avwl&checkoutMode=10&src=quiz" onclick="dispararEventoMeta('InitiateCheckout')" style="text-decoration:none;">QUERO EMAGRECER NA MENOPAUSA</a>
+      ${microBtn}
+      <p class="guarantee">🛡️ Garantia incondicional de 7 dias: se em até 7 dias você sentir que o desafio não é pra você, devolvemos 100% do seu investimento, sem perguntas e sem burocracia.</p>
+    </div>
+
     ${blocoCausas(vilao, vilao2)}
 
     <span class="next-step-badge">O próximo passo</span>
@@ -1340,27 +1325,9 @@ function renderResult(){
       <p class="muted" style="font-size:13px;margin:6px 0 14px;">As aulas ficam gravadas durante todo o desafio, caso você não possa assistir ao vivo.</p>
     </div>
 
-    <div class="urgency-strip">
-      <div>
-        <span class="urg-label">⏳ As inscrições fecham em:</span>
-        <p id="contador-vagas" style="font-weight:800;font-size:16px;color:#DC2626;margin:4px 0;"></p>
-        <p>Depois desse prazo, a turma de outubro fecha e você só entra na próxima.</p>
-      </div>
-    </div>
-
-    <div class="price-card" id="oferta">
-      <span class="promise-badge">🔥 Perca até 5kg durante o desafio</span>
-      <div class="price-old">R$ 147</div>
-      <div class="price-new">R$ 47</div>
-      <div class="price-tag">pagamento único</div>
-      <a class="btn" href="https://pay.hotmart.com/F107698915Y?off=y8f4avwl&checkoutMode=10&src=quiz" onclick="dispararEventoMeta('InitiateCheckout')" style="text-decoration:none;">QUERO EMAGRECER NA MENOPAUSA</a>
-      ${microBtn}
-      <p class="guarantee">🛡️ Garantia incondicional de 7 dias: se em até 7 dias você sentir que o desafio não é pra você, devolvemos 100% do seu investimento, sem perguntas e sem burocracia.</p>
-    </div>
-
     <h3 style="font-size:16px;text-align:center;margin-bottom:6px;">Centenas de mulheres já passaram pelo Desafio Seca Menopausa</h3>
     <p class="muted" style="text-align:center;font-size:13px;margin-bottom:16px;">Veja o que elas dizem:</p>
-    <div class="testi-print"><img src="depoimento-print-08.webp" alt="Depoimento" width="350" height="158" loading="lazy" decoding="async"></div>
+    <div class="testi-print"><img src="print-depoimento-pausa-02.webp" alt="Depoimento" width="750" height="550" loading="lazy" decoding="async"></div>
     <div class="testi-print"><img src="depoimento-print-07.webp" alt="Comentários de participantes do desafio" width="1170" height="525" loading="lazy" decoding="async"></div>
     <div class="testi-print"><img src="depoimento-print-02.webp" alt="Depoimento" width="1170" height="451" loading="lazy" decoding="async"></div>
     <div class="testi-print"><img src="depoimento-print-03.webp" alt="Depoimento" width="1170" height="393" loading="lazy" decoding="async"></div>
